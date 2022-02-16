@@ -1,0 +1,29 @@
+class Solution
+{
+public:
+    int lengthOfLongestSubstring(string s)
+    {
+        int M = 0, length = s.length();
+        for (int start = 0; start < length; ++start)
+        {
+            set<char> record;
+            record.clear();
+            bool repeat = false;
+            for (int end = start; end < length; ++end)
+            {
+                char cur = s[end];
+                if (record.find(cur) == record.end())
+                    record.insert(cur);
+                else
+                {
+                    M = max(M, end - start);
+                    repeat = true;
+                    break;
+                }
+            }
+            if (!repeat)
+                M = max(M, length - start);
+        }
+        return M;
+    }
+};
