@@ -4,22 +4,20 @@ public:
     int lengthOfLongestSubstring(string s)
     {
         int M = 0, length = s.length();
-        for (int start = 0; start < length; ++start)
+        for (int start = 0; start < length - M; ++start)
         {
-            set<char> record;
-            record.clear();
+            vector<bool> record(127, false);
             bool repeat = false;
             for (int end = start; end < length; ++end)
             {
-                char cur = s[end];
-                if (record.find(cur) == record.end())
-                    record.insert(cur);
-                else
+                if (record[s[end]])
                 {
                     M = max(M, end - start);
                     repeat = true;
                     break;
                 }
+                else
+                    record[s[end]] = true;
             }
             if (!repeat)
                 M = max(M, length - start);
