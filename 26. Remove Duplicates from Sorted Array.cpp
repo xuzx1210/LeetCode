@@ -3,12 +3,17 @@ class Solution
 public:
     int removeDuplicates(vector<int> &nums)
     {
-        for (int i = 0; i < nums.size() - 1; ++i)
-            if (nums[i] == nums[i + 1])
+        int i = 0, j = 1, n = nums.size();
+        while (j < n)
+        {
+            if (nums[i] == nums[j])
             {
-                nums.erase(nums.begin() + i + 1);
-                --i;
+                ++j;
+                continue;
             }
-        return nums.size();
+            else
+                nums[++i] = nums[j++];
+        }
+        return i + 1;
     }
 };
