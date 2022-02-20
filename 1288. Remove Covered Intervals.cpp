@@ -3,25 +3,20 @@ class Solution
 public:
     int removeCoveredIntervals(vector<vector<int>> &intervals)
     {
-        for (int i = 0; i < intervals.size(); ++i)
+        sort(intervals.begin(), intervals.end());
+        int left = intervals[0][0], right = intervals[0][1];
+        int result = 1;
+        for (int i = 1; i < intervals.size(); ++i)
         {
-            bool covered = false;
-            for (int j = 0; j < intervals.size(); ++j)
+            int curLeft = intervals[i][0], curRight = intervals[i][1];
+            if (left < curLeft && right < curRight)
+                ++result;
+            if (right < curRight)
             {
-                if (i == j)
-                    continue;
-                if (intervals[j][0] <= intervals[i][0] && intervals[i][1] <= intervals[j][1])
-                {
-                    covered = true;
-                    break;
-                }
-            }
-            if (covered)
-            {
-                intervals.erase(intervals.begin() + i);
-                --i;
+                left = curLeft;
+                right = curRight;
             }
         }
-        return intervals.size();
+        return result;
     }
 };
