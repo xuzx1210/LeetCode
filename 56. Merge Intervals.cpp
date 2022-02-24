@@ -3,21 +3,20 @@ class Solution
 public:
     vector<vector<int>> merge(vector<vector<int>> &intervals)
     {
-        for (int i = intervals.size() - 1; i > 0; --i)
+        sort(intervals.begin(), intervals.end());
+        vector<vector<int>> result({});
+        for (auto interval : intervals)
         {
-            int a = intervals[i][0], b = intervals[i][1];
-            for (int j = i - 1; j >= 0; --j)
+            if (result.empty())
             {
-                int c = intervals[j][0], d = intervals[j][1];
-                if (a <= c && c <= b || a <= d && d <= b || c <= a && a <= d || c <= b && b <= d)
-                {
-                    intervals[j][0] = min(a, c);
-                    intervals[j][1] = max(b, d);
-                    intervals.erase(intervals.begin() + i);
-                    break;
-                }
+                result.push_back(interval);
+                continue;
             }
+            if (result.back()[1] < interval[0])
+                result.push_back(interval);
+            else
+                result.back()[1] = max(result.back()[1], interval[1]);
         }
-        return intervals;
+        return result;
     }
 };
