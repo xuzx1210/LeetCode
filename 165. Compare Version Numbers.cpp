@@ -4,11 +4,13 @@ public:
     vector<int> split(string version)
     {
         vector<int> result({});
-        for (auto pos = version.find("."); pos != string::npos; pos = version.find("."))
-        {
-            result.push_back(stoi(string(version, 0, pos)));
-            version.erase(0, pos + 1);
-        }
+        for (int i = 0; i < version.length(); ++i)
+            if (version[i] == '.')
+            {
+                result.push_back(stoi(string(version, 0, i)));
+                version.erase(0, i + 1);
+                i = -1;
+            }
         result.push_back(stoi(version));
         return result;
     }
