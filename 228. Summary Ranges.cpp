@@ -1,26 +1,32 @@
 class Solution
 {
 public:
-    void push(vector<string> &result, vector<int> &nums, int size)
+    void push(vector<string> &result, vector<int> &nums, int left, int right)
     {
-        if (size == 1)
-            result.push_back(to_string(nums[0]));
+        if (right == left + 1)
+            result.push_back(to_string(nums[left]));
         else
-            result.push_back(to_string(nums[0]) + "->" + to_string(nums[size - 1]));
-        nums.erase(nums.begin(), nums.begin() + size);
+            result.push_back(to_string(nums[left]) + "->" + to_string(nums[right - 1]));
     }
     vector<string> summaryRanges(vector<int> &nums)
     {
         vector<string> result({});
-        for (int i = 1; i < nums.size(); ++i)
+        if (nums.empty())
+            return result;
+        if (nums.size() == 1)
         {
-            if (nums[i] == nums[i - 1] + 1)
-                continue;
-            push(result, nums, i);
-            i = 0;
+            result.push_back(to_string(nums[0]));
+            return result;
         }
-        if (!nums.empty())
-            push(result, nums, nums.size());
+        int left = 0, right = 1;
+        for (; right < nums.size(); ++right)
+        {
+            if (nums[right] == nums[right - 1] + 1)
+                continue;
+            push(result, nums, left, right);
+            left = right;
+        }
+        push(result, nums, left, right);
         return result;
     }
 };
