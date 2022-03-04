@@ -8,8 +8,7 @@ public:
         int mid = preorder[preLeft];
         int inPos = find(inorder.begin() + inLeft, inorder.begin() + inRight, mid) - inorder.begin();
         int prePos = preLeft + 1 + inPos - inLeft;
-        TreeNode *result = new TreeNode(mid, makeTree(preorder, inorder, preLeft + 1, prePos, inLeft, inPos), makeTree(preorder, inorder, prePos, preRight, inPos + 1, inRight));
-        return result;
+        return new TreeNode(mid, makeTree(preorder, inorder, preLeft + 1, prePos, inLeft, inPos), makeTree(preorder, inorder, prePos, preRight, inPos + 1, inRight));
     }
     TreeNode *buildTree(vector<int> &preorder, vector<int> &inorder)
     {
