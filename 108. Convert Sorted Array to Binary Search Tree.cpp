@@ -1,15 +1,16 @@
 class Solution
 {
 public:
+    TreeNode *makeTree(vector<int> &nums, int left, int right)
+    {
+        if (left == right)
+            return nullptr;
+        int mid = (left + right) >> 1;
+        TreeNode *result = new TreeNode(nums[mid], makeTree(nums, left, mid), makeTree(nums, mid + 1, right));
+        return result;
+    }
     TreeNode *sortedArrayToBST(vector<int> &nums)
     {
-        int half = nums.size() >> 1;
-        vector<int> leftTree(nums.begin(), nums.begin() + half), rightTree(nums.begin() + half + 1, nums.end());
-        TreeNode *cur = new TreeNode(nums[half]);
-        if (!leftTree.empty())
-            cur->left = sortedArrayToBST(leftTree);
-        if (!rightTree.empty())
-            cur->right = sortedArrayToBST(rightTree);
-        return cur;
+        return makeTree(nums, 0, nums.size());
     }
 };
