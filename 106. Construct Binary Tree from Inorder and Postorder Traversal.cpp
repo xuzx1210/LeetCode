@@ -1,18 +1,18 @@
 class Solution
 {
 public:
+    TreeNode *makeTree(vector<int> &inorder, vector<int> &postorder, int inLeft, int inRight, int postLeft, int postRight)
+    {
+        if (inLeft == inRight)
+            return nullptr;
+        int mid = postorder[postRight - 1];
+        int inPos = find(inorder.begin() + inLeft, inorder.begin() + inRight, mid) - inorder.begin();
+        int postPos = postLeft + inPos - inLeft;
+        TreeNode *result = new TreeNode(mid, makeTree(inorder, postorder, inLeft, inPos, postLeft, postPos), makeTree(inorder, postorder, inPos + 1, inRight, postPos, postRight - 1));
+        return result;
+    }
     TreeNode *buildTree(vector<int> &inorder, vector<int> &postorder)
     {
-        int mid = postorder.back();
-        auto it = find(inorder.begin(), inorder.end(), mid);
-        vector<int> leftInorder(inorder.begin(), it), rightInorder(it + 1, inorder.end());
-        int leftSize = leftInorder.size();
-        vector<int> leftPostorder(postorder.begin(), postorder.begin() + leftSize), rightPostorder(postorder.begin() + leftSize, postorder.end() - 1);
-        TreeNode *cur = new TreeNode(mid);
-        if (!leftInorder.empty())
-            cur->left = buildTree(leftInorder, leftPostorder);
-        if (!rightInorder.empty())
-            cur->right = buildTree(rightInorder, rightPostorder);
-        return cur;
+        return makeTree(inorder, postorder, 0, inorder.size(), 0, postorder.size());
     }
 };
