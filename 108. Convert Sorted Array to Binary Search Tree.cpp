@@ -6,8 +6,7 @@ public:
         if (left == right)
             return nullptr;
         int mid = (left + right) >> 1;
-        TreeNode *result = new TreeNode(nums[mid], makeTree(nums, left, mid), makeTree(nums, mid + 1, right));
-        return result;
+        return new TreeNode(nums[mid], makeTree(nums, left, mid), makeTree(nums, mid + 1, right));
     }
     TreeNode *sortedArrayToBST(vector<int> &nums)
     {
