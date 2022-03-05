@@ -12,7 +12,6 @@ public:
     }
     bool isBalanced(TreeNode *root)
     {
-        bool over1 = false;
         return maxDepth(root) != -1;
     }
 };
