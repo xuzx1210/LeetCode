@@ -3,12 +3,16 @@ class Solution
 public:
     bool hasCycle(ListNode *head)
     {
-        set<ListNode *> list({});
-        for (ListNode *cur = head; cur; cur = cur->next)
+        if (!head)
+            return false;
+        ListNode *slow = head, *fast = head;
+        while (slow->next && fast->next)
         {
-            if (list.find(cur) == list.end())
-                list.insert(cur);
-            else
+            if (!fast->next->next)
+                break;
+            slow = slow->next;
+            fast = fast->next->next;
+            if (slow == fast)
                 return true;
         }
         return false;
