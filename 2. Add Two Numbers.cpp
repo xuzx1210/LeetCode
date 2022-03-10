@@ -1,4 +1,3 @@
-typedef unsigned long long int ull;
 class Solution {
 public:
     ListNode *addTwoNumbers(ListNode *l1, ListNode *l2)
