@@ -9,8 +9,12 @@ public:
     {
         int half = (end - start + 1) >> 1;
         for (int i = 0; i < half; ++i)
+        {
             if (str[start + i] != str[end - i])
                 return false;
+            if (palindrome[start + i + 1][end - i - 1])
+                return true;
+        }
         return true;
     }
     void dfs(const int start)
@@ -35,7 +39,7 @@ public:
         result = {};
         int length = s.length();
         palindrome = vector<vector<bool>>(length, vector<bool>(length, false));
-        for (int i = 0; i < length; ++i)
+        for (int i = length - 1; i >= 0; --i)
             for (int j = i; j < length; ++j)
                 palindrome[i][j] = isPalindrome(i, j);
         dfs(0);
