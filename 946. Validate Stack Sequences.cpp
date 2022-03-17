@@ -3,22 +3,16 @@ class Solution
 public:
     bool validateStackSequences(vector<int> &pushed, vector<int> &popped)
     {
-        stack<int> s;
-        while (!s.empty())
-            s.pop();
-        int index = 0, size = pushed.size();
-        for (int i = 0; i < size; ++i)
+        int i = 0, j = 0;
+        for (auto num : pushed)
         {
-            s.push(pushed[i]);
-            while (!s.empty())
-                if (s.top() == popped[index])
-                {
-                    s.pop();
-                    ++index;
-                }
-                else
-                    break;
+            pushed[i++] = num;
+            while (i > 0 && pushed[i - 1] == popped[j])
+            {
+                --i;
+                ++j;
+            }
         }
-        return s.empty();
+        return !i;
     }
 };
