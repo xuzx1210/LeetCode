@@ -8,10 +8,12 @@ public:
         while (left < right)
         {
             int mid = (left + right) >> 1;
-            int cur = matrix[mid / n][mid % n];
-            if (cur < target)
+            auto d = div(mid, n);
+            int row = d.quot, column = d.rem;
+            int num = matrix[row][column];
+            if (target > num)
                 left = mid + 1;
-            else if (cur > target)
+            else if (target < num)
                 right = mid;
             else
                 return true;
