@@ -1,20 +1,20 @@
 class Solution
 {
 public:
-    void dfs(TreeNode *node, vector<TreeNode *> &nodes)
+    int accumulate;
+    Solution()
     {
-        if (!node)
-            return;
-        dfs(node->left, nodes);
-        nodes.push_back(node);
-        dfs(node->right, nodes);
+        accumulate = 0;
     }
     TreeNode *convertBST(TreeNode *root)
     {
-        vector<TreeNode *> nodes({});
-        dfs(root, nodes);
-        for (int i = nodes.size() - 2; i >= 0; --i)
-            nodes[i]->val += nodes[i + 1]->val;
+        if (root)
+        {
+            convertBST(root->right);
+            accumulate += root->val;
+            root->val = accumulate;
+            convertBST(root->left);
+        }
         return root;
     }
 };
