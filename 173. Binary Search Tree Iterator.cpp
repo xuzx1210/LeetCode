@@ -1,30 +1,29 @@
 class BSTIterator
 {
 public:
-    vector<TreeNode *> nodes;
-    int index, size;
-    void getNodes(TreeNode *node, vector<TreeNode *> &nodes)
+    queue<int> nodes;
+    void getNodes(TreeNode *node, queue<int> &nodes)
     {
         if (!node)
             return;
         getNodes(node->left, nodes);
-        nodes.push_back(node);
+        nodes.push(node->val);
         getNodes(node->right, nodes);
     }
     BSTIterator(TreeNode *root)
     {
-        nodes.clear();
+        while (!nodes.empty())
+            nodes.pop();
         getNodes(root, nodes);
-        size = nodes.size();
-        nodes.insert(nodes.begin(), nullptr);
-        index = 0;
     }
     int next()
     {
-        return nodes[++index]->val;
+        int result = nodes.front();
+        nodes.pop();
+        return result;
     }
     bool hasNext()
     {
-        return index < size;
+        return !nodes.empty();
     }
 };
