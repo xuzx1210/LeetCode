@@ -6,10 +6,8 @@ private:
 public:
     MinStack()
     {
-        while (!nums.empty())
-            nums.pop();
-        while (!mins.empty())
-            mins.pop();
+        nums = {};
+        mins = {};
         mins.push(INT_MAX);
     }
     void push(int val)
