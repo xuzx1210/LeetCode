@@ -3,7 +3,7 @@ class Solution
 private:
     static bool compare(string &a, string &b)
     {
-        string c = a + b, d = b + a;
+        string c(a + b), d(b + a);
         return c > d;
     }
 
