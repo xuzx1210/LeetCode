@@ -1,24 +1,26 @@
 class Solution
 {
 public:
-    int findDepth(TreeNode *node)
-    {
-        return node ? max(findDepth(node->left), findDepth(node->right)) + 1 : 0;
-    }
     vector<int> rightSideView(TreeNode *root)
     {
-        queue<pair<TreeNode *, int>> bfs({{root, 0}});
-        vector<int> result(findDepth(root));
+        queue<TreeNode *> bfs({root});
+        vector<int> result({});
+        if (!root)
+            return result;
         while (!bfs.empty())
         {
-            TreeNode *cur = bfs.front().first;
-            int depth = bfs.front().second;
-            bfs.pop();
-            if (!cur)
-                continue;
-            result[depth] = cur->val;
-            bfs.push({cur->left, depth + 1});
-            bfs.push({cur->right, depth + 1});
+            int size = bfs.size();
+            TreeNode *cur;
+            for (int i = 0; i < size; ++i)
+            {
+                cur = bfs.front();
+                bfs.pop();
+                if (cur->left)
+                    bfs.push(cur->left);
+                if (cur->right)
+                    bfs.push(cur->right);
+            }
+            result.push_back(cur->val);
         }
         return result;
     }
