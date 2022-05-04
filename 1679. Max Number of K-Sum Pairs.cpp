@@ -3,18 +3,18 @@ class Solution
 public:
     int maxOperations(vector<int> &nums, int k)
     {
-        sort(nums.begin(), nums.end());
+        unordered_map<int, int> frequency({});
         int result = 0;
-        int left = 0, right = nums.size() - 1;
-        while (left < right)
+        for (int num : nums)
         {
-            int sum = nums[left] + nums[right];
-            if (sum <= k)
-                ++left;
-            if (sum >= k)
-                --right;
-            if (sum == k)
+            int remain = k - num;
+            if (frequency[remain])
+            {
+                --frequency[remain];
                 ++result;
+            }
+            else
+                ++frequency[num];
         }
         return result;
     }
