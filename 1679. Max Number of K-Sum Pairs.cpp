@@ -9,16 +9,12 @@ public:
         while (left < right)
         {
             int sum = nums[left] + nums[right];
-            if (sum < k)
+            if (sum <= k)
                 ++left;
-            else if (sum > k)
+            if (sum >= k)
                 --right;
-            else
-            {
-                ++left;
-                --right;
+            if (sum == k)
                 ++result;
-            }
         }
         return result;
     }
