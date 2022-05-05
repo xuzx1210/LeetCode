@@ -10,14 +10,13 @@ public:
     }
     void push(int x)
     {
-        queue<int> tmp = {};
-        tmp.push(x);
-        while (!s.empty())
+        int size = s.size();
+        s.push(x);
+        for (int i = 0; i < size; ++i)
         {
-            tmp.push(s.front());
+            s.push(s.front());
             s.pop();
         }
-        s = tmp;
     }
     int pop()
     {
