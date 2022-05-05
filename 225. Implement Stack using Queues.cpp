@@ -10,27 +10,24 @@ public:
     }
     void push(int x)
     {
-        s.push(x);
-    }
-
-    int pop()
-    {
         queue<int> tmp = {};
-        int size = s.size();
-        for (int i = 0; i < size - 1; ++i)
+        tmp.push(x);
+        while (!s.empty())
         {
             tmp.push(s.front());
             s.pop();
         }
-        int result = s.front();
         s = tmp;
+    }
+    int pop()
+    {
+        int result = s.front();
+        s.pop();
         return result;
     }
     int top()
     {
-        int result = pop();
-        s.push(result);
-        return result;
+        return s.front();
     }
     bool empty()
     {
