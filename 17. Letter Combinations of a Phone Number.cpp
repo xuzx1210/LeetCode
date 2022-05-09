@@ -1,40 +1,38 @@
 class Solution
 {
-public:
-    vector<vector<char>> phone;
-    vector<string> result;
+private:
+    vector<string> result, phone;
     string cur;
-    void dfs(string &digits, int index)
+    vector<size_t> digits;
+    size_t size;
+    void dfs(size_t index)
     {
-        if (index == digits.length())
+        if (index == size)
         {
             result.push_back(cur);
             return;
         }
-        int digit = digits[index] - '2';
-        for (int i = 0; i < phone[digit].size(); ++i)
+        for (char c : phone[digits[index]])
         {
-            cur.push_back(phone[digit][i]);
-            dfs(digits, index + 1);
+            cur.push_back(c);
+            dfs(index + 1);
             cur.pop_back();
         }
     }
+
+public:
     vector<string> letterCombinations(string digits)
     {
-        if (digits == "")
-            return vector<string>();
-        phone.clear();
-        phone.push_back({'a', 'b', 'c'});
-        phone.push_back({'d', 'e', 'f'});
-        phone.push_back({'g', 'h', 'i'});
-        phone.push_back({'j', 'k', 'l'});
-        phone.push_back({'m', 'n', 'o'});
-        phone.push_back({'p', 'q', 'r', 's'});
-        phone.push_back({'t', 'u', 'v'});
-        phone.push_back({'w', 'x', 'y', 'z'});
+        size = digits.length();
         result.clear();
+        if (!size)
+            return result;
+        this->digits.clear();
+        for (char c : digits)
+            this->digits.push_back(c - '2');
+        phone = {"abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
         cur.clear();
-        dfs(digits, 0);
+        dfs(0);
         return result;
     }
 };
