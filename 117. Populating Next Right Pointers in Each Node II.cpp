@@ -1,28 +1,28 @@
 class Solution
 {
-public:
-    int maxDepth(Node *cur)
+private:
+    unordered_map<int, vector<Node *>> tree;
+    void dfs(Node *node, int depth)
     {
-        if (!cur)
-            return 0;
-        return max(maxDepth(cur->left), maxDepth(cur->right)) + 1;
-    }
-    void traverse(Node *cur, const int depth, vector<vector<Node *>> &tree)
-    {
-        if (!cur)
+        if (!node)
             return;
-        tree[depth].push_back(cur);
-        traverse(cur->left, depth + 1, tree);
-        traverse(cur->right, depth + 1, tree);
+        tree[depth].push_back(node);
+        dfs(node->left, depth + 1);
+        dfs(node->right, depth + 1);
     }
+
+public:
     Node *connect(Node *root)
     {
-        int depth = maxDepth(root);
-        vector<vector<Node *>> tree(depth, vector<Node *>({}));
-        traverse(root, 0, tree);
-        for (auto level : tree)
-            for (int i = 0; i < level.size() - 1; ++i)
-                level[i]->next = level[i + 1];
+        tree.clear();
+        dfs(root, 0);
+        for (auto &level : tree)
+        {
+            auto &list = level.second;
+            for (int i = 0; i < list.size() - 1; ++i)
+                list[i]->next = list[i + 1];
+            list.back()->next = nullptr;
+        }
         return root;
     }
 };
