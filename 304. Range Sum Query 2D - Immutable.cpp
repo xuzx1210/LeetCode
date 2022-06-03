@@ -7,7 +7,7 @@ public:
     NumMatrix(vector<vector<int>> &matrix)
     {
         int m = matrix.size(), n = matrix.front().size();
-        sum = vector<vector<int>>(m, vector<int>(n, 0));
+        sum = vector<vector<int>>(m, vector<int>(n));
         for (int i = 0; i < m; ++i)
             for (int j = 0; j < n; ++j)
                 if (i == 0)
