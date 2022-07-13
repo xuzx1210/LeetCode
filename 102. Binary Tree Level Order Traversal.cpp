@@ -1,40 +1,29 @@
 class Solution
 {
 public:
-    vector<vector<int>> result;
-    int findDepth(TreeNode *cur)
-    {
-        if (cur->left)
-        {
-            if (cur->right)
-                return max(findDepth(cur->left), findDepth(cur->right)) + 1;
-            else
-                return findDepth(cur->left) + 1;
-        }
-        else
-        {
-            if (cur->right)
-                return findDepth(cur->right) + 1;
-            else
-                return 1;
-        }
-    }
-    void dfs(TreeNode *cur, int depth)
-    {
-        result[depth].push_back(cur->val);
-        if (cur->left)
-            dfs(cur->left, depth + 1);
-        if (cur->right)
-            dfs(cur->right, depth + 1);
-    }
     vector<vector<int>> levelOrder(TreeNode *root)
     {
-        result.clear();
-        if (root == nullptr)
-            return result;
-        int depth = findDepth(root);
-        result = vector<vector<int>>(depth, vector<int>({}));
-        dfs(root, 0);
+        if (!root)
+            return {};
+        queue<TreeNode *> bfs({root});
+        vector<vector<int>> result = {};
+        while (!bfs.empty())
+        {
+            int size = bfs.size();
+            vector<int> level = {};
+            for (int i = 0; i < size; ++i)
+            {
+                TreeNode *cur = bfs.front();
+                bfs.pop();
+                if (!cur)
+                    continue;
+                level.push_back(cur->val);
+                bfs.push(cur->left);
+                bfs.push(cur->right);
+            }
+            if (!level.empty())
+                result.push_back(level);
+        }
         return result;
     }
 };
