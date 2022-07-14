@@ -1,17 +1,26 @@
 class Solution
 {
+private:
+    vector<int> preorder;
+    vector<int> inorder;
+
 public:
-    TreeNode *makeTree(vector<int> &preorder, vector<int> &inorder, int preLeft, int preRight, int inLeft, int inRight)
+    TreeNode *dfs(int &index, int left, int right)
     {
-        if (preLeft == preRight)
+        if (left == right)
             return nullptr;
-        int mid = preorder[preLeft];
-        int inPos = find(inorder.begin() + inLeft, inorder.begin() + inRight, mid) - inorder.begin();
-        int prePos = preLeft + 1 + inPos - inLeft;
-        return new TreeNode(mid, makeTree(preorder, inorder, preLeft + 1, prePos, inLeft, inPos), makeTree(preorder, inorder, prePos, preRight, inPos + 1, inRight));
+        int cur = preorder[index++];
+        int middle = find(inorder.begin() + left, inorder.begin() + right, cur) - inorder.begin();
+        TreeNode *node = new TreeNode(cur);
+        node->left = dfs(index, left, middle);
+        node->right = dfs(index, middle + 1, right);
+        return node;
     }
     TreeNode *buildTree(vector<int> &preorder, vector<int> &inorder)
     {
-        return makeTree(preorder, inorder, 0, preorder.size(), 0, inorder.size());
+        this->preorder = preorder;
+        this->inorder = inorder;
+        int index = 0;
+        return dfs(index, 0, inorder.size());
     }
 };
