@@ -1,26 +1,26 @@
 class Solution
 {
-public:
-    void traverse(vector<TreeNode *> &nodes, TreeNode *cur)
+private:
+    void dfs(TreeNode *cur, vector<TreeNode *> &nodes)
     {
+        if (!cur)
+            return;
         nodes.push_back(cur);
-        if (cur->left)
-            traverse(nodes, cur->left);
-        if (cur->right)
-            traverse(nodes, cur->right);
+        dfs(cur->left, nodes);
+        dfs(cur->right, nodes);
     }
+
+public:
     void flatten(TreeNode *root)
     {
-        if (!root)
-            return;
-        vector<TreeNode *> nodes({});
-        traverse(nodes, root);
-        for (int i = 0; i < nodes.size() - 1; ++i)
+        vector<TreeNode *> nodes = {};
+        dfs(root, nodes);
+        int size = nodes.size();
+        nodes.push_back(nullptr);
+        for (int i = 0; i < size; ++i)
         {
             nodes[i]->left = nullptr;
             nodes[i]->right = nodes[i + 1];
         }
-        nodes.back()->left = nullptr;
-        nodes.back()->right = nullptr;
     }
 };
