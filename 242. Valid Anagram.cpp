@@ -3,7 +3,7 @@ class Solution
 public:
     bool isAnagram(string s, string t)
     {
-        map<char, int> letters = {};
+        unordered_map<char, int> letters = {};
         for (char &c : s)
             ++letters[c];
         for (char &c : t)
