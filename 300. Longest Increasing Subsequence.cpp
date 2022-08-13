@@ -3,16 +3,14 @@ class Solution
 public:
     int lengthOfLIS(vector<int> &nums)
     {
-        int size = nums.size();
-        vector<int> dp(size, 1);
-        int result = 1;
-        for (int i = 1; i < size; ++i)
-        {
-            for (int j = 0; j < i; ++j)
-                if (nums[j] < nums[i])
-                    dp[i] = max(dp[i], dp[j] + 1);
-            result = max(result, dp[i]);
-        }
-        return result;
+        vector<int> result = {};
+        for (int num : nums)
+            if (result.empty())
+                result.push_back(num);
+            else if (result.back() < num)
+                result.push_back(num);
+            else
+                *lower_bound(result.begin(), result.end(), num) = num;
+        return result.size();
     }
 };
