@@ -14,10 +14,8 @@ public:
     vector<int> movesToStamp(string stamp, string target)
     {
         const int stampLength = stamp.length(), targetLength = target.length();
-        const int turns = 10 * targetLength;
         const string question(stampLength, '?');
         vector<int> result = {};
-        int turn = 0;
         bool change = true;
         vector<bool> visited(targetLength - stampLength + 1, false);
         while (change)
@@ -35,13 +33,10 @@ public:
                 }
                 if (!match(stamp, substring))
                     continue;
-                if (turn == turns)
-                    return {};
                 target.replace(i, stampLength, question);
                 result.push_back(i);
                 visited[i] = true;
                 change = true;
-                ++turn;
             }
         }
         if (target != string(targetLength, '?'))
