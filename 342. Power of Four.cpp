@@ -5,13 +5,12 @@ public:
     {
         if (n < 1)
             return false;
-        while (n)
+        for (; n; n >>= 2)
         {
             if (n == 1)
                 return true;
             if (n & 3)
                 return false;
-            n >>= 2;
         }
         return false;
     }
