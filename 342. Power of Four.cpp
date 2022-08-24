@@ -3,15 +3,6 @@ class Solution
 public:
     bool isPowerOfFour(int n)
     {
-        if (n < 1)
-            return false;
-        for (; n; n >>= 2)
-        {
-            if (n == 1)
-                return true;
-            if (n & 3)
-                return false;
-        }
-        return false;
+        return n > 0 && (n & (n - 1)) == 0 && (n - 1) % 3 == 0;
     }
 };
