@@ -11,8 +11,9 @@ public:
         for (int i = m - 1; i >= 0; --i)
             for (int j = n - 1; j >= 0; --j)
             {
-                mat[i][j] = diagonal[i - j + n - 1].top();
-                diagonal[i - j + n - 1].pop();
+                int index = i - j + n - 1;
+                mat[i][j] = diagonal[index].top();
+                diagonal[index].pop();
             }
         return mat;
     }
