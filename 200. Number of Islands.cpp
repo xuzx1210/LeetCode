@@ -2,13 +2,9 @@ class Solution
 {
 private:
     int m, n;
-    bool check(int i, int j)
-    {
-        return 0 <= i && i < m && 0 <= j && j < n;
-    }
     void dfs(vector<vector<char>> &grid, int i, int j)
     {
-        if (!check(i, j))
+        if (i < 0 || m <= i || j < 0 || n <= j)
             return;
         if (grid[i][j] == '0')
             return;
