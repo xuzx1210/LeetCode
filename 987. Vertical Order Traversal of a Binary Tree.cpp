@@ -23,8 +23,7 @@ public:
             for (auto &depth : index.second)
             {
                 sort(depth.second.begin(), depth.second.end());
-                for (int &num : depth.second)
-                    tmp.emplace_back(num);
+                tmp.insert(tmp.end(), depth.second.begin(), depth.second.end());
             }
             result.emplace_back(tmp);
         }
