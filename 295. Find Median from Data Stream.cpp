@@ -1,14 +1,15 @@
 class MedianFinder
 {
 private:
-    multiset<int> small, large;
+    priority_queue<int> small;
+    priority_queue<int, vector<int>, greater<int>> large;
     int size;
 
 public:
     MedianFinder()
     {
-        small.clear();
-        large.clear();
+        small = {};
+        large = {};
         size = 0;
     }
     void addNum(int num)
@@ -17,28 +18,21 @@ public:
         small.emplace(num);
         if (small.size() > large.size())
         {
-            auto it = small.end();
-            --it;
-            large.emplace(*it);
-            small.erase(it);
+            large.emplace(small.top());
+            small.pop();
         }
         if (!small.empty() && !large.empty())
-            while (true)
+            while (small.top() > large.top())
             {
-                auto ita = small.end();
-                --ita;
-                auto itb = large.begin();
-                int a = *ita, b = *itb;
-                if (a <= b)
-                    break;
-                small.erase(ita);
+                int a = small.top(), b = large.top();
+                small.pop();
+                large.pop();
                 small.emplace(b);
-                large.erase(itb);
                 large.emplace(a);
             }
     }
     double findMedian()
     {
-        return (size & 1) ? *large.begin() : (*small.rbegin() + *large.begin()) / 2.0;
+        return (size & 1) ? large.top() : (small.top() + large.top()) / 2.0;
     }
 };
