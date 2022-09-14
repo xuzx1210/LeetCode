@@ -3,15 +3,14 @@ class Solution
 private:
     void dfs(TreeNode *node, int &path, int &result)
     {
-        path ^= (1 << node->val);
-        if (!node->left && !node->right)
-            if (!(path & (path - 1)))
-                ++result;
-        if (node->left)
-            dfs(node->left, path, result);
-        if (node->right)
-            dfs(node->right, path, result);
-        path ^= (1 << node->val);
+        if (!node)
+            return;
+        int mask = 1 << node->val;
+        path ^= mask;
+        result += !node->left && !node->right && !(path & (path - 1));
+        dfs(node->left, path, result);
+        dfs(node->right, path, result);
+        path ^= mask;
     }
 
 public:
