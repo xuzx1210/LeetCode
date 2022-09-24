@@ -1,27 +1,28 @@
 class Solution
 {
-public:
-    bool dfs(TreeNode *cur, int remain)
+private:
+    bool result;
+    void dfs(TreeNode *node, int remain)
     {
-        remain -= cur->val;
-        if (!cur->left && !cur->right)
+        if (!node)
+            return;
+        remain -= node->val;
+        if (!node->left && !node->right && !remain)
         {
-            if (remain)
-                return false;
-            return true;
+            result = true;
+            return;
         }
-        if (cur->left)
-            if (dfs(cur->left, remain))
-                return true;
-        if (cur->right)
-            if (dfs(cur->right, remain))
-                return true;
-        return false;
+        dfs(node->left, remain);
+        if (result)
+            return;
+        dfs(node->right, remain);
     }
+
+public:
     bool hasPathSum(TreeNode *root, int targetSum)
     {
-        if (!root)
-            return false;
-        return dfs(root, targetSum);
+        result = false;
+        dfs(root, targetSum);
+        return result;
     }
 };
