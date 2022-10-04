@@ -7,11 +7,8 @@ private:
         if (!node)
             return;
         remain -= node->val;
-        if (!node->left && !node->right && !remain)
-        {
+        if (!remain && !node->left && !node->right)
             result = true;
-            return;
-        }
         dfs(node->left, remain);
         if (result)
             return;
