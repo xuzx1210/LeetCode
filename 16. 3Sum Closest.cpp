@@ -3,25 +3,34 @@ class Solution
 public:
     int threeSumClosest(vector<int> &nums, int target)
     {
-        int closet, m = INT_MAX;
-        for (int i = 0; i < nums.size() - 2; ++i)
+        int result = 100000, minDiff = 100000 - target, size = nums.size();
+        sort(nums.begin(), nums.end());
+        for (int i = 0; i < size - 2; ++i)
         {
-            int a = nums[i];
-            for (int j = i + 1; j < nums.size() - 1; ++j)
+            int left = i + 1, right = size - 1;
+            while (left < right)
             {
-                int b = nums[j];
-                for (int k = j + 1; k < nums.size(); ++k)
+                int sum = nums[i] + nums[left] + nums[right];
+                int diff;
+                if (sum < target)
                 {
-                    int sum = a + b + nums[k];
-                    int diff = abs(sum - target);
-                    if (diff < m)
-                    {
-                        closet = sum;
-                        m = diff;
-                    }
+                    diff = target - sum;
+                    ++left;
+                }
+                else if (sum > target)
+                {
+                    diff = sum - target;
+                    --right;
+                }
+                else
+                    return target;
+                if (diff < minDiff)
+                {
+                    result = sum;
+                    minDiff = diff;
                 }
             }
         }
-        return closet;
+        return result;
     }
 };
