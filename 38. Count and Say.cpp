@@ -7,19 +7,14 @@ public:
         for (int t = 1; t < n; ++t)
         {
             stringstream ss;
-            ss.clear();
-            for (int i = 0; i < result.length();)
-            {
-                char cur = result[i];
-                int count = 1;
-                for (int j = i + 1; j < result.length(); ++j)
-                    if (result[j] == cur)
-                        ++count;
-                    else
-                        break;
-                ss << count << cur;
-                i += count;
-            }
+            int start = 0, length = result.length();
+            for (int i = 1; i < length; ++i)
+                if (result[i] != result[start])
+                {
+                    ss << i - start << result[start];
+                    start = i;
+                }
+            ss << length - start << result[start];
             ss >> result;
         }
         return result;
