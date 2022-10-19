@@ -1,15 +1,5 @@
 class Solution
 {
-private:
-    static bool compare(pair<string, int> &a, pair<string, int> &b)
-    {
-        if (a.second > b.second)
-            return true;
-        if (a.second < b.second)
-            return false;
-        return a.first.compare(b.first) < 0;
-    }
-
 public:
     vector<string> topKFrequent(vector<string> &words, int k)
     {
@@ -23,6 +13,14 @@ public:
             wordCount[index].first = key;
             wordCount[index++].second = value;
         }
+        auto compare = [](pair<string, int> &a, pair<string, int> &b) -> bool
+        {
+            if (a.second > b.second)
+                return true;
+            if (a.second < b.second)
+                return false;
+            return a.first.compare(b.first) < 0;
+        };
         sort(wordCount.begin(), wordCount.end(), compare);
         vector<string> result(k);
         for (int i = 0; i < k; ++i)
