@@ -3,15 +3,16 @@ class Solution
 public:
     bool containsNearbyDuplicate(vector<int> &nums, int k)
     {
-        unordered_map<int, int> last;
-        for (size_t i = 0; i < nums.size(); ++i)
+        unordered_set<int> us;
+        size_t size = nums.size();
+        for (size_t i = 0; i < size; ++i)
         {
-            if (!last[nums[i]])
-                last[nums[i]] = i + 1;
-            else if (i - last[nums[i]] < k)
+            int cur = nums[i];
+            if (us.find(cur) != us.end())
                 return true;
-            else
-                last[nums[i]] = i + 1;
+            us.insert(cur);
+            if (i >= k)
+                us.erase(nums[i - k]);
         }
         return false;
     }
