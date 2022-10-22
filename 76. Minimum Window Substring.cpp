@@ -6,26 +6,26 @@ public:
         unordered_map<char, int> targetCount, counter;
         for (char &c : t)
             ++targetCount[c];
-        int targetRemain = targetCount.size(), length = s.length(), start = 0;
+        int targetRemain = targetCount.size(), length = s.length();
         pair<int, int> range = {0, length - 1};
-        for (int end = 0; end < length; ++end)
+        for (int left = 0, right = 0; right < length; ++right)
         {
-            char endChar = s[end];
-            if (targetCount[endChar])
-                if (++counter[endChar] == targetCount[endChar])
+            char end = s[right];
+            if (targetCount[end])
+                if (++counter[end] == targetCount[end])
                     --targetRemain;
-            for (; start <= end; ++start)
+            for (; left <= right; ++left)
             {
-                char startChar = s[start];
-                if (!targetCount[startChar])
+                char start = s[left];
+                if (!targetCount[start])
                     continue;
-                if (counter[startChar] > targetCount[startChar])
-                    --counter[startChar];
+                if (counter[start] > targetCount[start])
+                    --counter[start];
                 else
                     break;
             }
-            if (!targetRemain && end - start < range.second - range.first)
-                range = {start, end};
+            if (!targetRemain && right - left < range.second - range.first)
+                range = {left, right};
         }
         return targetRemain ? "" : s.substr(range.first, range.second - range.first + 1);
     }
