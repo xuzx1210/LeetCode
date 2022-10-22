@@ -10,20 +10,17 @@ public:
         pair<int, int> range = {0, length - 1};
         for (int end = 0; end < length; ++end)
         {
-            char e = s[end];
-            if (targetCount[e])
-            {
-                ++counter[e];
-                if (counter[e] == targetCount[e])
+            char endChar = s[end];
+            if (targetCount[endChar])
+                if (++counter[endChar] == targetCount[endChar])
                     --targetRemain;
-            }
             for (; start <= end; ++start)
             {
-                char cur = s[start];
-                if (!targetCount[cur])
+                char startChar = s[start];
+                if (!targetCount[startChar])
                     continue;
-                if (counter[cur] > targetCount[cur])
-                    --counter[cur];
+                if (counter[startChar] > targetCount[startChar])
+                    --counter[startChar];
                 else
                     break;
             }
