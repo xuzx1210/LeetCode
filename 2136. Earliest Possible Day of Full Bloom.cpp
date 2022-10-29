@@ -6,21 +6,13 @@ public:
         int size = plantTime.size();
         vector<pair<int, int>> flower(size);
         for (int i = 0; i < size; ++i)
-            flower[i] = {plantTime[i], growTime[i]};
-        auto compare = [](pair<int, int> &a, pair<int, int> &b)
-        {
-            if (a.second < b.second)
-                return false;
-            if (a.second > b.second)
-                return true;
-            return a.first < b.first;
-        };
-        sort(flower.begin(), flower.end(), compare);
+            flower[i] = {growTime[i], plantTime[i]};
+        sort(flower.begin(), flower.end());
         int result = 0;
-        for (int start = 0, i = 0; i < size; ++i)
+        for (int start = 0, i = size - 1; i >= 0; --i)
         {
-            start += flower[i].first;
-            result = max(result, start + flower[i].second);
+            start += flower[i].second;
+            result = max(result, start + flower[i].first);
         }
         return result;
     }
