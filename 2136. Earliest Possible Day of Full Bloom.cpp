@@ -1,18 +1,13 @@
-class Solution
-{
+class Solution {
 public:
-    int earliestFullBloom(vector<int> &plantTime, vector<int> &growTime)
-    {
-        int size = plantTime.size();
-        vector<pair<int, int>> flower(size);
-        for (int i = 0; i < size; ++i)
-            flower[i] = {growTime[i], plantTime[i]};
-        sort(flower.begin(), flower.end());
-        int result = 0;
-        for (int start = 0, i = size - 1; i >= 0; --i)
-        {
-            start += flower[i].second;
-            result = max(result, start + flower[i].first);
+    int earliestFullBloom(vector<int>& plantTime, vector<int>& growTime) {
+        vector<int> indices(plantTime.size());
+        iota(indices.begin(), indices.end(), 0);
+        sort(indices.begin(), indices.end(), [&](int i, int j) { return growTime[i] > growTime[j]; });
+        int result = 0, startTime = 0;
+        for (int index : indices) {
+            startTime += plantTime[index];
+            result = max(result, startTime + growTime[index]);
         }
         return result;
     }
