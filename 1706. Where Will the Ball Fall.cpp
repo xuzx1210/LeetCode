@@ -9,24 +9,18 @@ public:
         for (int j = 0; j < n; ++j)
             for (int i = 0; i < m; ++i)
             {
-                if (grid[i][result[j]] == 1)
-                {
-                    if (result[j] < n - 1)
-                        if (grid[i][result[j] + 1] == 1)
-                        {
-                            ++result[j];
-                            continue;
-                        }
-                }
-                else
-                {
-                    if (result[j])
-                        if (grid[i][result[j] - 1] == -1)
-                        {
-                            --result[j];
-                            continue;
-                        }
-                }
+                if (grid[i][result[j]] == 1 && result[j] < n - 1)
+                    if (grid[i][result[j] + 1] == 1)
+                    {
+                        ++result[j];
+                        continue;
+                    }
+                if (grid[i][result[j]] == -1 && result[j])
+                    if (grid[i][result[j] - 1] == -1)
+                    {
+                        --result[j];
+                        continue;
+                    }
                 result[j] = -1;
                 break;
             }
