@@ -3,7 +3,8 @@ class Solution
 public:
     int minMutation(string start, string end, vector<string> &bank)
     {
-        unordered_map<string, int> inBank{{start, true}}, visited{{start, true}};
+        const string genes("ACGT");
+        unordered_map<string, int> inBank, visited{{start, true}};
         for (string &str : bank)
             inBank[str] = true;
         queue<pair<string, int>> bfs({{start, 0}});
@@ -17,7 +18,7 @@ public:
             for (int i = 0; i < 8; ++i)
             {
                 char tmp = cur[i];
-                for (char gene : "ACGT")
+                for (char gene : genes)
                 {
                     cur[i] = gene;
                     if (inBank[cur] && !visited[cur])
