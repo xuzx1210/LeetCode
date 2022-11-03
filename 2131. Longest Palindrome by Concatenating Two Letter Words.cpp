@@ -28,10 +28,7 @@ public:
         }
         for (auto &[key, value] : same)
             if (value)
-            {
-                result += 2;
-                break;
-            }
+                return result + 2;
         return result;
     }
 };
