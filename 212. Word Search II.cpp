@@ -1,20 +1,20 @@
 class TrieNode
 {
 public:
-    vector<TrieNode *> children;
+    vector<TrieNode *> next;
     string word;
     bool isEnd;
     TrieNode()
     {
-        children.resize(26);
+        next.resize(26);
         word.clear();
         isEnd = false;
     }
     ~TrieNode()
     {
-        for (TrieNode *child : children)
-            if (child)
-                delete child;
+        for (TrieNode *node : next)
+            if (node)
+                delete node;
     }
 };
 class Trie
@@ -31,19 +31,16 @@ public:
             TrieNode *cur = root;
             for (char c : word)
             {
-                int index = c - 'a';
-                if (!cur->children[index])
-                    cur->children[index] = new TrieNode();
-                cur = cur->children[index];
+                TrieNode *&tmp = cur->next[c - 'a'];
+                if (!tmp)
+                    tmp = new TrieNode();
+                cur = tmp;
             }
             cur->isEnd = true;
             cur->word = word;
         }
     }
-    ~Trie()
-    {
-        delete root;
-    }
+    ~Trie() { delete root; }
     TrieNode *getRoot() { return root; }
 };
 class Solution
@@ -54,18 +51,18 @@ private:
     vector<string> result;
     void dfs(int x, int y, TrieNode *cur)
     {
-        if (x < 0 || m <= x || y < 0 || n <= y)
+        if (x < 0 || m <= x || y < 0 || n <= y) // check boundary
             return;
         char c = board[x][y];
-        if (c == ' ')
+        if (c == ' ') // check visited
             return;
-        cur = cur->children[c - 'a'];
-        if (!cur)
+        cur = cur->next[c - 'a'];
+        if (!cur) // check existence
             return;
         if (cur->isEnd)
         {
             result.emplace_back(cur->word);
-            cur->isEnd = false;
+            cur->isEnd = false; // avoid found again
         }
         board[x][y] = ' ';
         dfs(x - 1, y, cur);
