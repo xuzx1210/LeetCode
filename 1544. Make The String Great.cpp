@@ -3,16 +3,23 @@ class Solution
 public:
     string makeGood(string s)
     {
-        for (bool change = true; change;)
+        string result;
+        int length = s.length();
+        for (int i = 0; i < length;)
         {
-            change = false;
-            for (int i = s.length() - 2; i >= 0; --i)
-                if (s[i] - 'a' == s[i + 1] - 'A' || s[i] - 'A' == s[i + 1] - 'a')
+            result.push_back(s[i++]);
+            while (!result.empty() && i < length)
+            {
+                char back = result.back();
+                if (back - 'a' == s[i] - 'A' || back - 'A' == s[i] - 'a')
                 {
-                    s.erase(i, 2);
-                    change = true;
+                    result.pop_back();
+                    ++i;
                 }
+                else
+                    break;
+            }
         }
-        return s;
+        return result;
     }
 };
