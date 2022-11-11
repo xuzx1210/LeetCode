@@ -3,17 +3,10 @@ class Solution
 public:
     int removeDuplicates(vector<int> &nums)
     {
-        int i = 0, j = 1, n = nums.size();
-        while (j < n)
-        {
-            if (nums[i] == nums[j])
-            {
-                ++j;
-                continue;
-            }
-            else
-                nums[++i] = nums[j++];
-        }
-        return i + 1;
+        int k = 1, size = nums.size();
+        for (int i = 1; i < size; ++i)
+            if (nums[i] != nums[i - 1])
+                nums[k++] = nums[i];
+        return k;
     }
 };
