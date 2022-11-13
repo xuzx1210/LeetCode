@@ -4,12 +4,11 @@ public:
     string reverseWords(string s)
     {
         stringstream ss(s);
-        vector<string> words({});
-        string word;
-        while (ss >> word)
-            words.push_back(word);
-        string result("");
-        for (int i = words.size() - 1; i >= 1; --i)
+        string tmp, result;
+        vector<string> words;
+        while (ss >> tmp)
+            words.emplace_back(tmp);
+        for (int i = words.size() - 1; i; --i)
             result += (words[i] + ' ');
         result += words[0];
         return result;
