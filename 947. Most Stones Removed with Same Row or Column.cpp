@@ -1,12 +1,16 @@
 class Solution
 {
 private:
-    vector<vector<int>> graph;
+    vector<vector<int>> stones;
+    unordered_map<int, vector<int>> x, y;
     vector<bool> visited;
     void dfs(int index)
     {
         visited[index] = true;
-        for (int &next : graph[index])
+        for (int &next : x[stones[index][0]])
+            if (!visited[next])
+                dfs(next);
+        for (int &next : y[stones[index][1]])
             if (!visited[next])
                 dfs(next);
     }
@@ -14,15 +18,15 @@ private:
 public:
     int removeStones(vector<vector<int>> &stones)
     {
+        this->stones = stones;
         int result = stones.size();
-        graph.resize(result);
+        x.clear();
+        y.clear();
         for (int i = 0; i < result; ++i)
-            for (int j = i + 1; j < result; ++j)
-                if (stones[i][0] == stones[j][0] || stones[i][1] == stones[j][1])
-                {
-                    graph[i].emplace_back(j);
-                    graph[j].emplace_back(i);
-                }
+        {
+            x[stones[i][0]].emplace_back(i);
+            y[stones[i][1]].emplace_back(i);
+        }
         visited.resize(result);
         for (int i = result - 1; i >= 0; --i)
             if (!visited[i])
