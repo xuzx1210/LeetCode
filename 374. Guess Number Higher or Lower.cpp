@@ -3,23 +3,23 @@ class Solution
 public:
     int guessNumber(int n)
     {
-        int result;
-        for (int left = 1, right = n;;)
+        int picked;
+        for (int left = 1, right = n; left <= right;)
         {
-            int mid = (left >> 1) + (right >> 1);
+            int num = (left >> 1) + (right >> 1);
             if (left & right & 1)
-                ++mid;
-            int num = guess(mid);
-            if (num == -1)
-                right = mid - 1;
-            else if (num == 1)
-                left = mid + 1;
+                ++num;
+            int result = guess(num);
+            if (result == -1)
+                right = num - 1;
+            else if (result == 1)
+                left = num + 1;
             else
             {
-                result = mid;
+                picked = num;
                 break;
             }
         }
-        return result;
+        return picked;
     }
 };
