@@ -3,18 +3,17 @@ class Solution
 public:
     int nthUglyNumber(int n)
     {
-        vector<int> dp(n);
+        const vector<int> factors{2, 3, 5};
+        const int size = factors.size();
+        vector<int> index(size), dp(n, INT_MAX);
         dp[0] = 1;
-        int p2 = 0, p3 = 0, p5 = 0;
         for (int i = 1; i < n; ++i)
         {
-            dp[i] = min(dp[p2] * 2, min(dp[p3] * 3, dp[p5] * 5));
-            if (dp[i] == dp[p2] * 2)
-                ++p2;
-            if (dp[i] == dp[p3] * 3)
-                ++p3;
-            if (dp[i] == dp[p5] * 5)
-                ++p5;
+            for (int j = 0; j < size; ++j)
+                dp[i] = min(dp[i], dp[index[j]] * factors[j]);
+            for (int j = 0; j < size; ++j)
+                if (dp[i] == dp[index[j]] * factors[j])
+                    ++index[j];
         }
         return dp.back();
     }
