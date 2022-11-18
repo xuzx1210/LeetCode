@@ -5,10 +5,10 @@ public:
     {
         if (n < 1)
             return false;
-        vector<int> primes{2, 3, 5};
-        for (int &prime : primes)
-            while (!(n % prime))
-                n /= prime;
+        vector<int> factors{2, 3, 5};
+        for (int &factor : factors)
+            while (!(n % factor))
+                n /= factor;
         return n == 1;
     }
 };
