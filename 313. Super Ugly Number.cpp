@@ -3,16 +3,17 @@ class Solution
 public:
     int nthSuperUglyNumber(int n, vector<int> &primes)
     {
-        size_t size = primes.size();
-        vector<size_t> ugly(n, INT_MAX), index(size, 0);
-        ugly[0] = 1;
-        for (size_t i = 0; i < n; ++i)
+        const int size = primes.size();
+        vector<size_t> index(size), dp(n, INT_MAX);
+        dp[0] = 1;
+        for (int i = 1; i < n; ++i)
         {
-            for (size_t j = 0; j < size; ++j)
-                ugly[i] = min(ugly[i], ugly[index[j]] * primes[j]);
-            for (size_t j = 0; j < size; ++j)
-                index[j] += (ugly[i] == ugly[index[j]] * primes[j]);
+            for (int j = 0; j < size; ++j)
+                dp[i] = min(dp[i], dp[index[j]] * primes[j]);
+            for (int j = 0; j < size; ++j)
+                if (dp[i] == dp[index[j]] * primes[j])
+                    ++index[j];
         }
-        return ugly.back();
+        return dp.back();
     }
 };
