@@ -4,7 +4,7 @@ public:
     int lengthLongestPath(string input)
     {
         stringstream ss(input);
-        vector<int> length{0};
+        vector<int> length{0}; // avoid calling back() when empty
         string line;
         int result = 0;
         while (getline(ss, line))
