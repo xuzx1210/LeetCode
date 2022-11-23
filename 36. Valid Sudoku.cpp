@@ -5,49 +5,43 @@ public:
     {
         for (int i = 0; i < 9; ++i)
         {
-            vector<bool> record(9, false);
+            vector<bool> used(9);
             for (int j = 0; j < 9; ++j)
             {
                 char cur = board[i][j];
-                if (isdigit(cur))
-                {
-                    if (record[cur - '1'])
-                        return false;
-                    else
-                        record[cur - '1'] = true;
-                }
+                if (!isdigit(cur))
+                    continue;
+                if (used[cur - '1'])
+                    return false;
+                used[cur - '1'] = true;
             }
         }
-        for (int i = 0; i < 9; ++i)
+        for (int j = 0; j < 9; ++j)
         {
-            vector<bool> record(9, false);
-            for (int j = 0; j < 9; ++j)
+            vector<bool> used(9);
+            for (int i = 0; i < 9; ++i)
             {
-                char cur = board[j][i];
-                if (isdigit(cur))
-                {
-                    if (record[cur - '1'])
-                        return false;
-                    else
-                        record[cur - '1'] = true;
-                }
+                char cur = board[i][j];
+                if (!isdigit(cur))
+                    continue;
+                if (used[cur - '1'])
+                    return false;
+                used[cur - '1'] = true;
             }
         }
         for (int i = 0; i < 3; ++i)
             for (int j = 0; j < 3; ++j)
             {
-                vector<bool> record(9, false);
-                for (int k = 0; k < 3; ++k)
-                    for (int l = 0; l < 3; ++l)
+                vector<bool> used(9);
+                for (int r = 0; r < 3; ++r)
+                    for (int c = 0; c < 3; ++c)
                     {
-                        char cur = board[i * 3 + k][j * 3 + l];
-                        if (isdigit(cur))
-                        {
-                            if (record[cur - '1'])
-                                return false;
-                            else
-                                record[cur - '1'] = true;
-                        }
+                        char cur = board[i * 3 + r][j * 3 + c];
+                        if (!isdigit(cur))
+                            continue;
+                        if (used[cur - '1'])
+                            return false;
+                        used[cur - '1'] = true;
                     }
             }
         return true;
