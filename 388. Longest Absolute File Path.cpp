@@ -4,19 +4,16 @@ public:
     int lengthLongestPath(string input)
     {
         stringstream ss(input);
-        stack<int> length;
+        vector<int> length{0};
         string line;
         int result = 0;
         while (getline(ss, line))
         {
-            int tabs = 0;
-            while (line[tabs] == '\t')
-                ++tabs;
-            for (int i = length.size() - 1; i >= tabs; --i)
-                length.pop();
-            length.emplace((length.empty() ? 0 : length.top() + 1) + line.length() - tabs);
+            int tabs = line.find_last_of('\t') + 1;
+            length.erase(length.begin() + tabs + 1, length.end());
+            length.emplace_back(length.back() + 1 + line.length() - tabs);
             if (line.find('.') != string::npos) // check if line is a file (with . and extension)
-                result = max(result, length.top());
+                result = max(result, length.back() - 1);
         }
         return result;
     }
