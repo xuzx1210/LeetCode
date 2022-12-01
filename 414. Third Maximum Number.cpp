@@ -3,16 +3,10 @@ class Solution
 public:
     int thirdMax(vector<int> &nums)
     {
-        const size_t size = nums.size();
-        sort(nums.rbegin(), nums.rend());
-        int prev = nums.front(), countDown = 2;
-        for (size_t i = 1; i < size; ++i)
-            if (nums[i] != prev)
-            {
-                prev = nums[i];
-                if (!--countDown)
-                    break;
-            }
-        return countDown ? nums.front() : prev;
+        set<int> top3;
+        for (int &num : nums)
+            if (top3.emplace(num).second && top3.size() > 3)
+                top3.erase(*top3.begin());
+        return top3.size() == 3 ? *top3.begin() : *top3.rbegin();
     }
 };
