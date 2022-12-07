@@ -4,20 +4,20 @@ private:
     Node *dfs(Node *head)
     { // return the last node of the nested double linked list which starts from head
         Node *last = head;
-        for (Node *cur = head; cur; cur = cur->next)
+        for (Node *curr = head; curr; curr = curr->next)
         {
-            last = cur; // record the last node
-            if (!cur->child)
+            last = curr; // record the last node
+            if (!curr->child)
                 continue;
-            Node *childLast = dfs(cur->child), *curNext = cur->next;
-            cur->next = cur->child;
-            cur->child->prev = cur;
-            cur->child = nullptr; // reset child pointer
-            childLast->next = curNext;
-            if (!curNext) // if current node is the last node of the layer
+            Node *childLast = dfs(curr->child), *currNext = curr->next;
+            curr->next = curr->child;
+            curr->child->prev = curr;
+            curr->child = nullptr; // reset child pointer
+            childLast->next = currNext;
+            if (!currNext) // if curr is the last node of the layer
                 return childLast;
-            curNext->prev = childLast;
-            cur = childLast; // skip nodes between cur to last
+            currNext->prev = childLast;
+            curr = childLast; // skip nodes between curr to childLast
         }
         return last;
     }
