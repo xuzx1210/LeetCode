@@ -1,24 +1,27 @@
 class Solution
 {
-private:
-    map<int, vector<int>> tree;
-    void dfs(const Node *cur, const int depth)
-    {
-        if (!cur)
-            return;
-        tree[depth].emplace_back(cur->val);
-        for (Node *next : cur->children)
-            dfs(next, depth + 1);
-    }
-
 public:
     vector<vector<int>> levelOrder(Node *root)
     {
-        tree.clear();
-        dfs(root, 0);
-        vector<vector<int>> result = {};
-        for (auto &level : tree)
-            result.emplace_back(level.second);
+        vector<vector<int>> result{};
+        queue<Node *> bfs({root});
+        while (!bfs.empty())
+        {
+            vector<int> level{};
+            const size_t size = bfs.size();
+            for (size_t i = 0; i < size; ++i)
+            {
+                Node *cur = bfs.front();
+                bfs.pop();
+                if (!cur)
+                    continue;
+                level.emplace_back(cur->val);
+                for (Node *child : cur->children)
+                    bfs.emplace(child);
+            }
+            if (!level.empty())
+                result.emplace_back(level);
+        }
         return result;
     }
 };
