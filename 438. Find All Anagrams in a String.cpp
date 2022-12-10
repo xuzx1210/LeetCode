@@ -11,8 +11,9 @@ public:
             ++counter[c - 'a'];
         for (int start = 0, end = 0; end < sLength; ++end)
         {
-            --counter[s[end] - 'a'];
-            while (counter[s[end] - 'a'] < 0)
+            int &cur = counter[s[end] - 'a'];
+            --cur;
+            while (cur < 0)
                 ++counter[s[start++] - 'a'];
             if (end - start + 1 == pLength)
                 result.emplace_back(start);
