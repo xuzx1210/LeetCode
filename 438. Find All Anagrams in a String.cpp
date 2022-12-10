@@ -3,8 +3,10 @@ class Solution
 public:
     vector<int> findAnagrams(string s, string p)
     {
-        vector<int> counter(26, 0), result{};
         const int sLength = s.length(), pLength = p.length();
+        if (sLength < pLength)
+            return {};
+        vector<int> counter(26, 0), result{};
         for (char c : p)
             ++counter[c - 'a'];
         for (int start = 0, end = 0; end < sLength; ++end)
