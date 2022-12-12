@@ -2,15 +2,14 @@ class Solution
 {
 public:
     int climbStairs(int n)
-    {
-        if (n < 2)
-            return 1;
-        int a = 1, b = 1;
+    { // initial index is -1, 0, 1
+        int prev2 = 0, prev1 = 1, result = 1;
         for (int i = 2; i <= n; ++i)
         {
-            a += b;
-            swap(a, b);
+            prev2 = prev1;
+            prev1 = result;
+            result = prev2 + prev1;
         }
-        return b;
+        return result;
     }
 };
