@@ -3,36 +3,28 @@ class Solution
 public:
     int evalRPN(vector<string> &tokens)
     {
-        stack<int> nums;
-        while (!nums.empty())
-            nums.pop();
-        for (string token : tokens)
+        stack<long long> result{};
+        for (string &token : tokens)
         {
-            if (isdigit(token.back()))
-                nums.push(stoi(token));
-            else
+            char first = token.back();
+            if (isdigit(first))
             {
-                int b = nums.top();
-                nums.pop();
-                int a = nums.top();
-                nums.pop();
-                switch (token[0])
-                {
-                case '+':
-                    nums.push(a + b);
-                    break;
-                case '-':
-                    nums.push(a - b);
-                    break;
-                case '*':
-                    nums.push(a * b);
-                    break;
-                case '/':
-                    nums.push(a / b);
-                    break;
-                }
+                result.emplace(stoi(token));
+                continue;
             }
+            long long a, b = result.top();
+            result.pop();
+            a = result.top();
+            result.pop();
+            if (first == '+')
+                result.emplace(a + b);
+            else if (first == '-')
+                result.emplace(a - b);
+            else if (first == '*')
+                result.emplace(a * b);
+            else
+                result.emplace(a / b);
         }
-        return nums.top();
+        return result.top();
     }
 };
