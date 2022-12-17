@@ -6,8 +6,8 @@ public:
         stack<long long> result{};
         for (string &token : tokens)
         {
-            char first = token.back();
-            if (isdigit(first))
+            char op = token.back();
+            if (isdigit(op))
             {
                 result.emplace(stoi(token));
                 continue;
@@ -16,11 +16,11 @@ public:
             result.pop();
             a = result.top();
             result.pop();
-            if (first == '+')
+            if (op == '+')
                 result.emplace(a + b);
-            else if (first == '-')
+            else if (op == '-')
                 result.emplace(a - b);
-            else if (first == '*')
+            else if (op == '*')
                 result.emplace(a * b);
             else
                 result.emplace(a / b);
