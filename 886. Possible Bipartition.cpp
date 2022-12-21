@@ -10,7 +10,7 @@ public:
             graph[dislike[1] - 1].emplace_back(dislike[0] - 1);
         }
         vector<bool> visited(n, false), state(n);
-        for (int i = 0; i < n; ++i) // do bfs start with every unvisited element
+        for (int i = 0; i < n; ++i) // do bfs start with every unvisited person
         {
             if (visited[i])
                 continue;
