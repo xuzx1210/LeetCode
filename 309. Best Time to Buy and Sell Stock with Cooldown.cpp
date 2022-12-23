@@ -3,14 +3,14 @@ class Solution
 public:
     int maxProfit(vector<int> &prices)
     {
-        int wait = 0, hold = -prices[0], cool = 0, size = prices.size();
-        for (int i = 1; i < size; ++i)
+        int idle = 0, hold = INT_MIN, cool = 0;
+        for (const int &price : prices)
         {
-            int prevWait = wait;
-            wait = max(wait, cool);
-            hold = max(prevWait - prices[i], hold);
-            cool = hold + prices[i];
+            int prevCool = cool;
+            cool = hold + price;
+            hold = max(hold, idle - price);
+            idle = max(idle, prevCool);
         }
-        return max(wait, cool);
+        return max(idle, cool);
     }
 };
