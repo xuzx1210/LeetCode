@@ -3,10 +3,8 @@ class Solution
 public:
     int numTilings(int n)
     {
-        if (n == 1)
-            return 1;
-        if (n == 2)
-            return 2;
+        if (n < 3)
+            return n;
         size_t mod = 1000000007;
         vector<size_t> dp(n + 1);
         dp[0] = 1;
