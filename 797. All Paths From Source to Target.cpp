@@ -1,7 +1,6 @@
 class Solution
 {
 private:
-    int n;
     vector<vector<int>> graph;
     vector<vector<vector<int>>> pathsFromTarget; // store paths from target to current index: {n-1, ..., cur}
     vector<bool> visited;
@@ -21,8 +20,8 @@ private:
 public:
     vector<vector<int>> allPathsSourceTarget(vector<vector<int>> &graph)
     {
+        const int n = graph.size();
         this->graph = graph;
-        n = graph.size();
         pathsFromTarget.resize(n, vector<vector<int>>{});
         pathsFromTarget[n - 1].push_back({n - 1});
         visited.resize(n, false);
