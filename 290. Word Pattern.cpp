@@ -2,33 +2,21 @@ class Solution
 {
 public:
     bool wordPattern(string pattern, string s)
-    {
-        vector<string> words{};
+    {                              // index 0 for not exist
+        vector<size_t> p2i(26, 0); // pattern to index
+        map<string, size_t> w2i{}; // word to index
+        const size_t length = pattern.length();
+        size_t i = 0;
         stringstream ss(s);
-        string word;
-        while (ss >> word)
-            words.emplace_back(word);
-        const size_t length = pattern.length(), size = words.size();
-        if (length != size)
-            return false;
-        unordered_map<char, string> p2w{};
-        unordered_map<string, char> w2p{};
-        for (size_t i = 0; i < size; ++i)
+        for (string word; ss >> word; ++i)
         {
-            auto itp2w = p2w.find(pattern[i]);
-            auto itw2p = w2p.find(words[i]);
-            bool nop = itp2w == p2w.end(), now = itw2p == w2p.end();
-            if (nop && !now || !nop && now) // one exist
+            if (i >= length) // words is longer than pattern
                 return false;
-            if (nop) // no exist
-            {
-                p2w[pattern[i]] = words[i];
-                w2p[words[i]] = pattern[i];
-                continue;
-            }                                                               // both exist
-            if (p2w[pattern[i]] != words[i] || w2p[words[i]] != pattern[i]) // conflict
+            size_t cur = pattern[i] - 'a';
+            if (p2i[cur] != w2i[word]) // not match
                 return false;
+            p2i[cur] = w2i[word] = i + 1; // update index of char and word
         }
-        return true;
+        return i == length; // avoid pattern longer than words
     }
 };
