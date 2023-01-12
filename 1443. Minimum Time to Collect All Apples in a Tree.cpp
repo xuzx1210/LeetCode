@@ -6,12 +6,14 @@ private:
     { // whether there exists red node below cur
         bool red = false;
         for (int &next : graph[cur])
-            if (next != pre) // avoid go up
-                if (dfs(next, cur, result, hasApple))
-                {
-                    result += 2; // go down and go back
-                    red = true;
-                }
+        {
+            if (next == pre) // avoid go up
+                continue;
+            if (!dfs(next, cur, result, hasApple))
+                continue;
+            result += 2; // go down and go back
+            red = true;
+        }
         return red || hasApple[cur]; // red node below or cur is red node
     }
 
