@@ -1,47 +1,45 @@
 class Solution
 {
-public:
-    string str;
-    vector<string> cur;
+private:
+    string s;
+    size_t length;
+    vector<vector<size_t>> palindrome;
+    vector<string> path;
     vector<vector<string>> result;
-    vector<vector<bool>> palindrome;
-    bool isPalindrome(int start, int end)
+    bool isPalindrome(size_t start, size_t end)
     {
-        int half = (end - start + 1) >> 1;
-        for (int i = 0; i < half; ++i)
-        {
-            if (str[start + i] != str[end - i])
+        for (; start < end; ++start, --end)
+            if (s[start] != s[end])
                 return false;
-            if (palindrome[start + i + 1][end - i - 1])
-                return true;
-        }
         return true;
     }
-    void dfs(const int start)
+    void dfs(const size_t index)
     {
-        if (start == str.length())
+        if (index == length)
         {
-            result.push_back(cur);
+            result.emplace_back(path);
             return;
         }
-        for (int i = start; i < str.length(); ++i)
-            if (palindrome[start][i])
-            {
-                cur.push_back(string(str, start, i - start + 1));
-                dfs(i + 1);
-                cur.pop_back();
-            }
+        for (const size_t next : palindrome[index])
+        {
+            path.emplace_back(s, index, next - index);
+            dfs(next);
+            path.pop_back();
+        }
     }
+
+public:
     vector<vector<string>> partition(string s)
     {
-        str = s;
-        cur = {};
-        result = {};
-        int length = s.length();
-        palindrome = vector<vector<bool>>(length, vector<bool>(length, false));
-        for (int i = length - 1; i >= 0; --i)
-            for (int j = i; j < length; ++j)
-                palindrome[i][j] = isPalindrome(i, j);
+        this->s = s;
+        length = s.length();
+        palindrome.resize(length, vector<size_t>{});
+        for (size_t start = 0; start < length; ++start)
+            for (size_t end = start; end < length; ++end)
+                if (isPalindrome(start, end))
+                    palindrome[start].emplace_back(end + 1);
+        path.clear();
+        result.clear();
         dfs(0);
         return result;
     }
