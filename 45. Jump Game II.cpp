@@ -4,27 +4,16 @@ public:
     int jump(vector<int> &nums)
     {
         const int n = nums.size();
-        vector<bool> visited(n, false);
-        visited[0] = true;
-        queue<pair<int, int>> bfs;
-        while (!bfs.empty())
-            bfs.pop();
-        bfs.push({0, 0});
-        while (!bfs.empty())
+        int result = 0;
+        for (int i = 0, end = 0, far = 0; i < n - 1; ++i)
         {
-            int index = bfs.front().first, depth = bfs.front().second;
-            if (index == n - 1)
-                return depth;
-            bfs.pop();
-            int maxDistance = nums[index];
-            for (int i = max(0, index - maxDistance); i <= min(n - 1, index + maxDistance); ++i)
+            far = max(far, i + nums[i]);
+            if (i == end)
             {
-                if (visited[i])
-                    continue;
-                bfs.push({i, depth + 1});
-                visited[i] = true;
+                ++result;
+                end = far;
             }
         }
-        return 0;
+        return result;
     }
 };
