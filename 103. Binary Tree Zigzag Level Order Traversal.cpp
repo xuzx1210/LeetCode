@@ -1,43 +1,26 @@
 class Solution
 {
-public:
+private:
     vector<vector<int>> result;
-    int findDepth(TreeNode *cur)
+    void dfs(const TreeNode *node, const int depth)
     {
-        if (cur->left)
-        {
-            if (cur->right)
-                return max(findDepth(cur->left), findDepth(cur->right)) + 1;
-            else
-                return findDepth(cur->left) + 1;
-        }
+        if (!node)
+            return;
+        if (depth == result.size())
+            result.push_back({node->val});
         else
-        {
-            if (cur->right)
-                return findDepth(cur->right) + 1;
-            else
-                return 1;
-        }
+            result[depth].emplace_back(node->val);
+        dfs(node->left, depth + 1);
+        dfs(node->right, depth + 1);
     }
-    void dfs(TreeNode *cur, int depth)
-    {
-        result[depth].push_back(cur->val);
-        if (cur->left)
-            dfs(cur->left, depth + 1);
-        if (cur->right)
-            dfs(cur->right, depth + 1);
-    }
+
+public:
     vector<vector<int>> zigzagLevelOrder(TreeNode *root)
     {
         result.clear();
-        if (root == nullptr)
-            return result;
-        int depth = findDepth(root);
-        result = vector<vector<int>>(depth, vector<int>({}));
         dfs(root, 0);
-        for (int i = 0; i < result.size(); ++i)
-            if (i & 1)
-                reverse(result[i].begin(), result[i].end());
+        for (int level = 1; level < result.size(); level += 2)
+            reverse(result[level].begin(), result[level].end());
         return result;
     }
 };
