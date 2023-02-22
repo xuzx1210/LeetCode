@@ -1,19 +1,18 @@
 class Solution
 {
 private:
-    bool feasible(int capacity, vector<int> &weights, int days)
+    bool feasible(const int capacity, const vector<int> &weights, const int days)
     {
         int daysNeeded = 1, currentLoad = 0;
         for (const int weight : weights)
         {
-            currentLoad += weight;
-            if (currentLoad > capacity)
-            {
-                ++daysNeeded;
-                currentLoad = weight;
-            }
+            if ((currentLoad += weight) <= capacity)
+                continue;
+            currentLoad = weight;
+            if (daysNeeded++ == days)
+                return false;
         }
-        return daysNeeded <= days;
+        return true;
     }
 
 public:
