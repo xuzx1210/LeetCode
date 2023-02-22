@@ -6,7 +6,7 @@ private:
         int daysNeeded = 1, currentLoad = 0;
         for (const int weight : weights)
         {
-            if ((currentLoad += weight) <= capacity)
+            if ((currentLoad += weight) <= capacity) // not over capacity
                 continue;
             currentLoad = weight;
             if (daysNeeded++ == days)
@@ -24,7 +24,7 @@ public:
             left = max(left, weight);
             right += weight;
         }
-        while (left < right)
+        while (left < right) // maximum weight to total weight
         {
             const int middle = (left + right) >> 1;
             if (feasible(middle, weights, days))
@@ -32,6 +32,6 @@ public:
             else
                 left = middle + 1;
         }
-        return left;
+        return left; // or right, because left==right
     }
 };
