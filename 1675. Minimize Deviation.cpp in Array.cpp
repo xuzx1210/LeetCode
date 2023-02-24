@@ -3,25 +3,23 @@ class Solution
 public:
     int minimumDeviation(vector<int> &nums)
     {
-        priority_queue<int> pq;
-        while (!pq.empty())
-            pq.pop();
-        int m = INT_MAX;
-        for (auto num : nums)
+        priority_queue<int> pq{};
+        int minimum = INT_MAX;
+        for (int num : nums)
         {
             if (num & 1)
                 num <<= 1;
-            m = min(m, num);
-            pq.push(num);
+            minimum = min(minimum, num);
+            pq.emplace(num);
         }
-        int result = pq.top() - m;
+        int result = pq.top() - minimum;
         while (!(pq.top() & 1))
         {
-            int M = pq.top() >> 1;
+            const int cur = pq.top() >> 1;
+            pq.emplace(cur);
             pq.pop();
-            pq.push(M);
-            m = min(m, M);
-            result = min(result, pq.top() - m);
+            minimum = min(minimum, cur);
+            result = min(result, pq.top() - minimum);
         }
         return result;
     }
