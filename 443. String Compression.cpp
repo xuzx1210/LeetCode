@@ -1,5 +1,13 @@
 class Solution
 {
+private:
+    void addChar(string &compressed, char &last, int &counter)
+    {
+        compressed.push_back(last);
+        if (counter > 1)
+            compressed += to_string(counter);
+    }
+
 public:
     int compress(vector<char> &chars)
     {
@@ -11,15 +19,11 @@ public:
                 ++counter;
             else
             {
-                compressed.push_back(last);
+                addChar(compressed, last, counter);
                 last = c;
-                if (counter > 1)
-                    compressed += to_string(counter);
                 counter = 1;
             }
-        compressed.push_back(last);
-        if (counter > 1)
-            compressed += to_string(counter);
+        addChar(compressed, last, counter);
         chars = vector<char>(compressed.begin() + 1, compressed.end());
         return chars.size();
     }
