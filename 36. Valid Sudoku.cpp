@@ -1,48 +1,43 @@
 class Solution
 {
+private:
+    bool contradiction(vector<vector<char>> &board, const int x, const int y, vector<bool> &exist)
+    {
+        const char cur = board[x][y];
+        if (cur == '.')
+            return false;
+        const int index = cur - '1';
+        if (exist[index])
+            return true;
+        exist[index] = true;
+        return false;
+    }
+
 public:
     bool isValidSudoku(vector<vector<char>> &board)
     {
-        for (int i = 0; i < 9; ++i)
+        for (int row = 0; row < 9; ++row)
         {
-            vector<bool> used(9);
-            for (int j = 0; j < 9; ++j)
-            {
-                char cur = board[i][j];
-                if (!isdigit(cur))
-                    continue;
-                if (used[cur - '1'])
+            vector<bool> exist(9, false);
+            for (int col = 0; col < 9; ++col)
+                if (contradiction(board, row, col, exist))
                     return false;
-                used[cur - '1'] = true;
-            }
         }
-        for (int j = 0; j < 9; ++j)
+        for (int col = 0; col < 9; ++col)
         {
-            vector<bool> used(9);
-            for (int i = 0; i < 9; ++i)
-            {
-                char cur = board[i][j];
-                if (!isdigit(cur))
-                    continue;
-                if (used[cur - '1'])
+            vector<bool> exist(9, false);
+            for (int row = 0; row < 9; ++row)
+                if (contradiction(board, row, col, exist))
                     return false;
-                used[cur - '1'] = true;
-            }
         }
-        for (int i = 0; i < 3; ++i)
-            for (int j = 0; j < 3; ++j)
+        for (int ROW = 0; ROW < 3; ++ROW)
+            for (int COL = 0; COL < 3; ++COL)
             {
-                vector<bool> used(9);
-                for (int r = 0; r < 3; ++r)
-                    for (int c = 0; c < 3; ++c)
-                    {
-                        char cur = board[i * 3 + r][j * 3 + c];
-                        if (!isdigit(cur))
-                            continue;
-                        if (used[cur - '1'])
+                vector<bool> exist(9, false);
+                for (int row = 0; row < 3; ++row)
+                    for (int col = 0; col < 3; ++col)
+                        if (contradiction(board, ROW * 3 + row, COL * 3 + col, exist))
                             return false;
-                        used[cur - '1'] = true;
-                    }
             }
         return true;
     }
