@@ -1,18 +1,20 @@
 class Solution
 {
-public:
-    TreeNode *makeTree(vector<int> &nums, int left, int right)
+private:
+    TreeNode *makeTree(const vector<int>::const_iterator begin, const vector<int>::const_iterator end)
     {
-        if (left == right)
+        if (begin == end)
             return nullptr;
-        int mid = (left + right) >> 1;
-        return new TreeNode(nums[mid], makeTree(nums, left, mid), makeTree(nums, mid + 1, right));
+        const vector<int>::const_iterator middle = begin + ((end - begin) >> 1);
+        return new TreeNode(*middle, makeTree(begin, middle), makeTree(middle + 1, end));
     }
+
+public:
     TreeNode *sortedListToBST(ListNode *head)
     {
-        vector<int> nums({});
+        vector<int> vals{};
         for (ListNode *cur = head; cur; cur = cur->next)
-            nums.push_back(cur->val);
-        return makeTree(nums, 0, nums.size());
+            vals.emplace_back(cur->val);
+        return makeTree(vals.begin(), vals.end());
     }
 };
