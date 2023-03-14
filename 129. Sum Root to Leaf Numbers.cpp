@@ -1,28 +1,19 @@
 class Solution
 {
-public:
-    void dfs(TreeNode *cur, int path, vector<int> &nums)
+private:
+    int dfs(TreeNode *node, int path)
     {
-        path = path * 10 + cur->val;
-        if (!cur->left && !cur->right)
-        {
-            nums.push_back(path);
-            return;
-        }
-        if (cur->left)
-            dfs(cur->left, path, nums);
-        if (cur->right)
-            dfs(cur->right, path, nums);
+        if (!node)
+            return 0;
+        path = path * 10 + node->val;
+        if (!node->left && !node->right)
+            return path;
+        return dfs(node->left, path) + dfs(node->right, path);
     }
+
+public:
     int sumNumbers(TreeNode *root)
     {
-        if (!root)
-            return 0;
-        vector<int> nums({});
-        dfs(root, 0, nums);
-        int result = 0;
-        for (int num : nums)
-            result += num;
-        return result;
+        return dfs(root, 0);
     }
 };
