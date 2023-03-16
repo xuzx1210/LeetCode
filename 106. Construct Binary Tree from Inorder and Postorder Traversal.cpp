@@ -5,13 +5,12 @@ private:
     {
         if (begin == end)
             return nullptr;
-        const int val = postorder.back();
+        const int x = postorder.back();
         postorder.pop_back();
-        const vector<int>::const_iterator middle = find(begin, end, val);
-        TreeNode *result = new TreeNode(val);
-        result->right = dfs(middle + 1, end, postorder);
-        result->left = dfs(begin, middle, postorder);
-        return result;
+        const vector<int>::const_iterator middle = find(begin, end, x);
+        TreeNode *right = dfs(middle + 1, end, postorder);
+        TreeNode *left = dfs(begin, middle, postorder);
+        return new TreeNode(x, left, right);
     }
 
 public:
