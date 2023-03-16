@@ -1,17 +1,22 @@
 class Solution
 {
-public:
-    TreeNode *makeTree(vector<int> &inorder, vector<int> &postorder, int inLeft, int inRight, int postLeft, int postRight)
+private:
+    TreeNode *dfs(const vector<int>::const_iterator begin, const vector<int>::const_iterator end, vector<int> &postorder)
     {
-        if (inLeft == inRight)
+        if (begin == end)
             return nullptr;
-        int mid = postorder[postRight - 1];
-        int inPos = find(inorder.begin() + inLeft, inorder.begin() + inRight, mid) - inorder.begin();
-        int postPos = postLeft + inPos - inLeft;
-        return new TreeNode(mid, makeTree(inorder, postorder, inLeft, inPos, postLeft, postPos), makeTree(inorder, postorder, inPos + 1, inRight, postPos, postRight - 1));
+        const int val = postorder.back();
+        postorder.pop_back();
+        const vector<int>::const_iterator middle = find(begin, end, val);
+        TreeNode *result = new TreeNode(val);
+        result->right = dfs(middle + 1, end, postorder);
+        result->left = dfs(begin, middle, postorder);
+        return result;
     }
+
+public:
     TreeNode *buildTree(vector<int> &inorder, vector<int> &postorder)
     {
-        return makeTree(inorder, postorder, 0, inorder.size(), 0, postorder.size());
+        return dfs(inorder.begin(), inorder.end(), postorder);
     }
 };
