@@ -1,70 +1,59 @@
 class Trie
 {
 private:
-    class Node
+    class TrieNode
     {
-    private:
-        vector<Node *> next;
-        bool stopHere;
-
     public:
-        Node()
+        bool isWord;
+        vector<TrieNode *> alphabet;
+        TrieNode()
         {
-            next.resize(26, nullptr);
-            stopHere = false;
-        }
-        void insert(string &word, int index)
-        {
-            if (index == word.length())
-            {
-                stopHere = true;
-                return;
-            }
-            int c = word[index] - 'a';
-            if (!next[c])
-            {
-                Node *tmp = new Node;
-                next[c] = tmp;
-            }
-            next[c]->insert(word, index + 1);
-        }
-        bool search(string &word, int index)
-        {
-            if (index == word.length())
-                return stopHere;
-            int c = word[index] - 'a';
-            if (!next[c])
-                return false;
-            return next[c]->search(word, index + 1);
-        }
-        bool startsWith(string &word, int index)
-        {
-            if (index == word.length())
-                return true;
-            int c = word[index] - 'a';
-            if (!next[c])
-                return false;
-            return next[c]->startsWith(word, index + 1);
+            isWord = false;
+            alphabet.resize(26, nullptr);
         }
     };
-    Node *root;
+    TrieNode *root;
+    bool find(TrieNode *&node, const string &str)
+    {
+        const int length = str.length();
+        for (int i = 0; i < length; ++i)
+        {
+            TrieNode *&next = node->alphabet[str[i] - 'a'];
+            if (!next)
+                return false;
+            node = next;
+        }
+        return true;
+    }
 
 public:
     Trie()
     {
-        Node *tmp = new Node;
-        root = tmp;
+        root = new TrieNode();
     }
     void insert(string word)
     {
-        root->insert(word, 0);
+        TrieNode *cur = root;
+        const int length = word.length();
+        for (int i = 0; i < length; ++i)
+        {
+            TrieNode *&next = cur->alphabet[word[i] - 'a'];
+            if (!next)
+                next = new TrieNode();
+            cur = next;
+        }
+        cur->isWord = true;
     }
     bool search(string word)
     {
-        return root->search(word, 0);
+        TrieNode *cur = root;
+        if (!find(cur, word))
+            return false;
+        return cur->isWord;
     }
     bool startsWith(string prefix)
     {
-        return root->startsWith(prefix, 0);
+        TrieNode *cur = root;
+        return find(cur, prefix);
     }
 };
