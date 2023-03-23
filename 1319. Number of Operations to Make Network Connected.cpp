@@ -21,8 +21,7 @@ private:
 public:
     int makeConnected(int n, vector<vector<int>> &connections)
     {
-        const int connectionsLength = connections.size();
-        if (connectionsLength < n - 1)
+        if (connections.size() < n - 1)
             return -1;
         unionFind.resize(n);
         iota(unionFind.begin(), unionFind.end(), 0);
