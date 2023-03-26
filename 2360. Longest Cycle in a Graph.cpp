@@ -4,9 +4,8 @@ public:
     int longestCycle(vector<int> &edges)
     {
         const int n = edges.size();
-        int result = -1;
+        int result = -1, index = 1;
         vector<int> nodeIndex(n, 0);
-        int index = 1;
         for (int pathBegin = 0; pathBegin < n; ++pathBegin)
         {
             const int startIndex = index;
