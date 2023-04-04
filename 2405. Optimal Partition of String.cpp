@@ -3,16 +3,16 @@ class Solution
 public:
     int partitionString(string s)
     {
-        int result = 1;
-        vector<bool> letter(26, false);
+        int result = 1, flag = 0;
         for (const char c : s)
         {
-            if (letter[c - 'a'])
+            const int offset = c - 'a';
+            if (flag & (1 << offset))
             {
-                letter = vector<bool>(26, false);
                 ++result;
+                flag = 0;
             }
-            letter[c - 'a'] = true;
+            flag |= 1 << offset;
         }
         return result;
     }
