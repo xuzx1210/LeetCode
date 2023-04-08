@@ -3,53 +3,31 @@ class Solution
 public:
     Node *cloneGraph(Node *node)
     {
-        if (node == nullptr)
+        if (!node)
             return nullptr;
-        int M = 0, start = node->val;
-        queue<Node *> bfs;
-        while (!bfs.empty())
-            bfs.pop();
-        bfs.push(node);
-        set<Node *> visited;
-        visited.clear();
-        visited.insert(node);
-        vector<pair<int, vector<int>>> graph({});
+        vector<Node *> index2node{};
+        unordered_map<Node *, int> node2index{};
+        unordered_map<Node *, bool> visited{};
+        queue<Node *> bfs({node});
         while (!bfs.empty())
         {
             Node *cur = bfs.front();
             bfs.pop();
-            int curVal = cur->val;
-            M = max(M, cur->val);
-            vector<int> curNeighbor({});
-            for (auto neighbor : cur->neighbors)
-            {
-                curNeighbor.push_back(neighbor->val);
-                if (visited.find(neighbor) == visited.end())
-                {
-                    bfs.push(neighbor);
-                    visited.insert(neighbor);
-                }
-            }
-            graph.push_back({curVal, curNeighbor});
+            if (visited[cur])
+                continue;
+            visited[cur] = true;
+            node2index[cur] = index2node.size();
+            index2node.emplace_back(cur);
+            for (Node *neighbor : cur->neighbors)
+                bfs.emplace(neighbor);
         }
-        vector<vector<bool>> connection(M, vector<bool>(M, false));
-        for (auto vertex : graph)
-            for (auto neighbor : vertex.second)
-                connection[vertex.first - 1][neighbor - 1] = true;
-        vector<Node *> result({});
-        for (int i = 0; i < M; ++i)
-        {
-            Node *tmp = new Node(i + 1);
-            tmp->neighbors.clear();
-            result.push_back(tmp);
-        }
-        for (int i = 0; i < M; ++i)
-        {
-            Node *cur = result[i];
-            for (int j = 0; j < M; ++j)
-                if (connection[i][j])
-                    cur->neighbors.push_back(result[j]);
-        }
-        return result[start - 1];
+        const int size = index2node.size();
+        vector<Node *> graph(size, nullptr);
+        for (int i = 0; i < size; ++i)
+            graph[i] = new Node(index2node[i]->val);
+        for (int i = 0; i < size; ++i)
+            for (Node *neighbor : index2node[i]->neighbors)
+                graph[i]->neighbors.emplace_back(graph[node2index[neighbor]]);
+        return graph[node2index[node]];
     }
 };
