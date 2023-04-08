@@ -31,3 +31,25 @@ public:
         return graph[node2index[node]];
     }
 };
+class Solution
+{
+private:
+    unordered_map<Node *, Node *> old2new;
+    Node *dfs(Node *cur)
+    {
+        Node *clone = new Node(cur->val);
+        old2new[cur] = clone;
+        for (Node *neighbor : cur->neighbors)
+            clone->neighbors.emplace_back(old2new.find(neighbor) == old2new.end() ? dfs(neighbor) : old2new[neighbor]);
+        return clone;
+    }
+
+public:
+    Node *cloneGraph(Node *node)
+    {
+        if (!node)
+            return nullptr;
+        old2new.clear();
+        return dfs(node);
+    }
+};
