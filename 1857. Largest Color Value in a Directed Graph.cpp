@@ -15,7 +15,7 @@ private:
         if (pathVisited[cur])
         {
             cycle = true;
-            return vector<int>(26);
+            return {};
         }
         if (globalVisited[cur])
             return dp[cur];
@@ -25,7 +25,7 @@ private:
         {
             vector<int> tmp(dfs(next, colors));
             if (cycle)
-                return vector<int>(26);
+                return {};
             maxVector(dp[cur], tmp);
         }
         ++dp[cur][colors[cur] - 'a'];
