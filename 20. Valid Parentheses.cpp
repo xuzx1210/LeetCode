@@ -3,36 +3,17 @@ class Solution
 public:
     bool isValid(string s)
     {
-        if (!s.length())
-            return true;
-        if (s.length() & 1)
-            return false;
-        unordered_map<char, char> um;
-        um.clear();
-        um['('] = ')';
-        um['{'] = '}';
-        um['['] = ']';
-        stack<char> bracket;
-        while (!bracket.empty())
-            bracket.pop();
-        for (int i = 0; i < s.length(); ++i)
-        {
-            char c = s[i];
-            if (bracket.empty())
-                bracket.push(c);
+        unordered_map<char, char> close2open{{')', '('}, {']', '['}, {'}', '{'}};
+        stack<char> brackets{};
+        for (char bracket : s)
+            if (close2open.find(bracket) == close2open.end())
+                brackets.emplace(bracket);
+            else if (brackets.empty())
+                return false;
+            else if (brackets.top() == close2open[bracket])
+                brackets.pop();
             else
-            {
-                if (c == '(' || c == '{' || c == '[')
-                    bracket.push(c);
-                else
-                {
-                    if (um[bracket.top()] == c)
-                        bracket.pop();
-                    else
-                        return false;
-                }
-            }
-        }
-        return bracket.empty();
+                return false;
+        return brackets.empty();
     }
 };
