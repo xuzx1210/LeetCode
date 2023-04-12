@@ -3,6 +3,7 @@ class Solution
 public:
     string simplifyPath(string path)
     {
+        // split path by '/'
         path.push_back('/');
         const int length = path.length();
         vector<string> directories{};
@@ -14,6 +15,7 @@ public:
                 directories.emplace_back(path, begin, i - begin);
             begin = i + 1;
         }
+        // remove useless directories
         const int size = directories.size();
         int end = 0;
         for (int i = 0; i < size; ++i)
@@ -23,6 +25,7 @@ public:
                 end = max(0, end - 1);
             else
                 directories[end++] = directories[i];
+        // return result
         if (!end)
             return "/";
         string result{};
