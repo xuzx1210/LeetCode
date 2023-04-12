@@ -3,34 +3,23 @@ class Solution
 public:
     string simplifyPath(string path)
     {
-        // split path by '/'
-        path.push_back('/');
-        const int length = path.length();
+        string line{};
+        stringstream ss(path);
         vector<string> directories{};
-        for (int begin = 0, i = 0; i < length; ++i)
-        {
-            if (path[i] != '/')
+        while (getline(ss, line, '/'))
+            if (line == "" || line == ".")
                 continue;
-            if (begin < i)
-                directories.emplace_back(path, begin, i - begin);
-            begin = i + 1;
-        }
-        // remove useless directories
-        const int size = directories.size();
-        int end = 0;
-        for (int i = 0; i < size; ++i)
-            if (directories[i] == ".")
+            else if (line != "..")
+                directories.emplace_back(line);
+            else if (directories.empty())
                 continue;
-            else if (directories[i] == "..")
-                end = max(0, end - 1);
             else
-                directories[end++] = directories[i];
-        // return result
-        if (!end)
+                directories.pop_back();
+        if (directories.empty())
             return "/";
         string result{};
-        for (int i = 0; i < end; ++i)
-            result += ("/" + directories[i]);
+        for (const string &directory : directories)
+            result += ("/" + directory);
         return result;
     }
 };
