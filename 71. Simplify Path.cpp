@@ -3,41 +3,31 @@ class Solution
 public:
     string simplifyPath(string path)
     {
-        for (int i = path.length() - 1; i > 0; --i)
-            if (path[i] == '/')
-                if (path[i - 1] == '/')
-                    path.erase(path.begin() + i);
-        path.erase(path.begin());
-        if (path.length())
-            if (path.back() == '/')
-                path.pop_back();
-        vector<string> directories({});
-        for (int i = 0; i < path.length(); ++i)
-            if (path[i] == '/')
-            {
-                directories.push_back(string(path, 0, i));
-                path.erase(0, i + 1);
-                i = -1;
-            }
-        directories.push_back(path);
-        vector<string> directoryStack({});
-        for (string directory : directories)
+        path.push_back('/');
+        const int length = path.length();
+        vector<string> directories{};
+        for (int begin = 0, i = 0; i < length; ++i)
         {
-            if (directory == ".")
+            if (path[i] != '/')
                 continue;
-            if (directory == "..")
-            {
-                if (!directoryStack.empty())
-                    directoryStack.pop_back();
-                continue;
-            }
-            directoryStack.push_back(directory);
+            if (begin < i)
+                directories.emplace_back(path, begin, i - begin);
+            begin = i + 1;
         }
-        if (directoryStack.empty())
+        const int size = directories.size();
+        int end = 0;
+        for (int i = 0; i < size; ++i)
+            if (directories[i] == ".")
+                continue;
+            else if (directories[i] == "..")
+                end = max(0, end - 1);
+            else
+                directories[end++] = directories[i];
+        if (!end)
             return "/";
-        string result("");
-        for (string directory : directoryStack)
-            result += ("/" + directory);
+        string result{};
+        for (int i = 0; i < end; ++i)
+            result += ("/" + directories[i]);
         return result;
     }
 };
