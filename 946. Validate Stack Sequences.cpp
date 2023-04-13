@@ -3,16 +3,17 @@ class Solution
 public:
     bool validateStackSequences(vector<int> &pushed, vector<int> &popped)
     {
-        int i = 0, j = 0;
-        for (auto num : pushed)
+        int pushIndex = 0, popIndex = 0;
+        for (int num : pushed)
         {
-            pushed[i++] = num;
-            while (i > 0 && pushed[i - 1] == popped[j])
+            pushed[pushIndex] = num;
+            while (-1 < pushIndex && pushed[pushIndex] == popped[popIndex])
             {
-                --i;
-                ++j;
+                --pushIndex;
+                ++popIndex;
             }
+            ++pushIndex;
         }
-        return !i;
+        return !pushIndex;
     }
 };
