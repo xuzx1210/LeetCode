@@ -10,8 +10,8 @@ public:
         vector<int> dp0(k + 1, 0), dp1(k + 1, 0);            // dp0: piles[0 : pileCount - 1], dp1: piles[0 : pileCount]
         for (int pileCount = 1; pileCount <= n; ++pileCount) // current pile is piles[pileCount - 1], considering piles[0 : pileCount]
         {
-            for (int coinCount = 1; coinCount <= k; ++coinCount)                                         // coinCount: how many coins will be taken from piles[0 : pileCount]
-                for (int coins = 1; coins <= coinCount && coins <= piles[pileCount - 1].size(); ++coins) // coins: how many coins will be taken from piles[pileCount - 1]
+            for (int coinCount = 1; coinCount <= k; ++coinCount)                                   // coinCount: how many coins will be taken from piles[0 : pileCount]
+                for (int coins = min(coinCount, (int)piles[pileCount - 1].size()); coins; --coins) // coins: how many coins will be taken from piles[pileCount - 1]
                     dp1[coinCount] = max(dp1[coinCount], dp0[coinCount - coins] + piles[pileCount - 1][coins - 1]);
             dp0 = dp1;
         }
