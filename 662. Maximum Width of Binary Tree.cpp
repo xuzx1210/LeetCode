@@ -3,28 +3,24 @@ class Solution
 public:
     int widthOfBinaryTree(TreeNode *root)
     {
-        if (root == nullptr)
-            return 0;
-        queue<pair<TreeNode *, unsigned long long int>> bfs;
-        while (!bfs.empty())
-            bfs.pop();
-        bfs.push({root, 0});
-        int result = 0;
+        queue<pair<TreeNode *, int>> bfs({{root, 0}});
+        int result = -1;
         while (!bfs.empty())
         {
-            int start = bfs.front().second, end = bfs.back().second;
-            result = max(result, end - start + 0);
-            int size = bfs.size();
-            for (int i = 0; i < size; ++i)
+            int minimum = INT_MAX, maximum = 0;
+            for (int size = bfs.size(); size; --size)
             {
-                TreeNode *cur = bfs.front().first;
-                int index = bfs.front().second - start;
+                auto [cur, index] = bfs.front();
                 bfs.pop();
-                if (cur->left)
-                    bfs.push({cur->left, (index << 1) + 1});
-                if (cur->right)
-                    bfs.push({cur->right, (index << 1) + 2});
+                if (!cur)
+                    continue;
+                minimum = min(minimum, index);
+                maximum = index;
+                const int doubleIndex = (index - minimum) << 1;
+                bfs.emplace(cur->left, doubleIndex);
+                bfs.emplace(cur->right, doubleIndex + 1);
             }
+            result = max(result, maximum - minimum);
         }
         return result + 1;
     }
