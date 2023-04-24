@@ -6,13 +6,13 @@ public:
         priority_queue<int> pq(stones.begin(), stones.end());
         while (pq.size() > 1)
         {
-            int y = pq.top();
+            const int y = pq.top();
             pq.pop();
-            int x = pq.top();
+            const int x = pq.top();
             pq.pop();
-            int diff = y - x;
+            const int diff = y - x;
             if (diff)
-                pq.push(diff);
+                pq.emplace(diff);
         }
         return pq.empty() ? 0 : pq.top();
     }
