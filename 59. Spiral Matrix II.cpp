@@ -3,8 +3,9 @@ class Solution
 public:
     vector<vector<int>> generateMatrix(int n)
     {
-        vector<vector<int>> result(n, vector<int>(n, 0));
-        int num = 1, half = n >> 1;
+        vector<vector<int>> result(n, vector<int>(n));
+        int num = 1;
+        const int half = n >> 1;
         for (int i = 0; i < half; ++i)
         {
             int back = n - 1 - i;
