@@ -1,11 +1,18 @@
-class Solution {
+class Solution
+{
 public:
     ListNode *swapNodes(ListNode *head, int k)
     {
-        vector<ListNode *> list;
-        for (auto cur = head; cur; cur = cur->next)
-            list.push_back(cur);
-        swap(list[k - 1]->val, list[list.size() - k]->val);
+        ListNode *first = head;
+        for (int i = 1; i < k; ++i)
+            first = first->next;
+        ListNode *second = head, *tmp = first;
+        while (tmp->next)
+        {
+            tmp = tmp->next;
+            second = second->next;
+        }
+        swap(first->val, second->val);
         return head;
     }
 };
