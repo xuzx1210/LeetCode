@@ -1,21 +1,23 @@
-class Solution {
+class Solution
+{
 public:
     ListNode *swapPairs(ListNode *head)
     {
-        vector<int> num;
-        num.clear();
-        ListNode *cur = head;
-        for (; cur != nullptr; cur = cur->next)
-            num.push_back(cur->val);
-        int swapTime = (num.size() >> 1);
-        for (int i = 0; i < swapTime; ++i)
-            swap(num[i << 1], num[(i << 1) + 1]);
-        cur = head;
-        for (int i = 0; i < num.size(); ++i)
+        ListNode sentinel(0, head);
+        for (ListNode *prev = &sentinel, *curr = head; curr;)
         {
-            cur->val = num[i];
-            cur = cur->next;
+            // check next
+            ListNode *next = curr->next;
+            if (!next)
+                break;
+            // assign link
+            curr->next = next->next;
+            next->next = curr;
+            prev->next = next;
+            // move pointer
+            prev = curr;
+            curr = curr->next;
         }
-        return head;
+        return sentinel.next;
     }
 };
