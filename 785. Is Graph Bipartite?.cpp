@@ -1,3 +1,4 @@
+// DFS
 class Solution
 {
 private:
@@ -25,5 +26,35 @@ public:
             if (!visited[node][0] && !visited[node][1])
                 dfs(node, 0, graph);
         return !error;
+    }
+};
+
+// BFS
+class Solution
+{
+public:
+    bool isBipartite(vector<vector<int>> &graph)
+    {
+        const int n = graph.size();
+        vector<vector<int>> visited(n, vector<int>(2, false));
+        for (int node = 0; node < n; ++node)
+        {
+            if (visited[node][0] || visited[node][1])
+                continue;
+            for (queue<pair<int, int>> bfs({{node, 0}}); !bfs.empty(); bfs.pop())
+            {
+                const int curr = bfs.front().first;
+                int part = bfs.front().second;
+                if (visited[curr][!part])
+                    return false;
+                if (visited[curr][part])
+                    continue;
+                visited[curr][part] = true;
+                part = !part;
+                for (int next : graph[curr])
+                    bfs.emplace(next, part);
+            }
+        }
+        return true;
     }
 };
