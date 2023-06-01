@@ -3,37 +3,18 @@ class Solution
 public:
     int shortestPathBinaryMatrix(vector<vector<int>> &grid)
     {
-        if (grid[0][0] == 1)
-            return -1;
-        size_t n = grid.size();
-        queue<pair<pair<int, int>, int>> bfs = {};
-        bfs.push({{0, 0}, 1});
-        vector<vector<bool>> visited(n, vector<bool>(n, false));
-        visited[0][0] = true;
-        while (!bfs.empty())
+        const int n = grid.size();
+        for (queue<tuple<int, int, int>> bfs({{0, 0, 1}}); !bfs.empty(); bfs.pop())
         {
-            int i = bfs.front().first.first, j = bfs.front().first.second, depth = bfs.front().second;
-            if (i == n - 1 && j == n - 1)
-                return depth;
-            bfs.pop();
-            for (int a = -1; a <= 1; ++a)
-            {
-                int x = i + a;
-                if (x < 0 || n <= x)
-                    continue;
-                for (int b = -1; b <= 1; ++b)
-                {
-                    int y = j + b;
-                    if (y < 0 || n <= y)
-                        continue;
-                    if (visited[x][y])
-                        continue;
-                    if (grid[x][y] == 1)
-                        continue;
-                    bfs.push({{x, y}, depth + 1});
-                    visited[x][y] = true;
-                }
-            }
+            const auto &[x, y, length] = bfs.front();
+            if (x < 0 || n <= x || y < 0 || n <= y || grid[x][y] != 0)
+                continue;
+            grid[x][y] = 1;
+            if (x == n - 1 && y == n - 1)
+                return length;
+            for (int dx = -1; dx <= 1; ++dx)
+                for (int dy = -1; dy <= 1; ++dy)
+                    bfs.emplace(x + dx, y + dy, length + 1);
         }
         return -1;
     }
