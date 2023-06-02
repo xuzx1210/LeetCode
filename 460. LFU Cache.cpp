@@ -1,18 +1,32 @@
 class LFUCache
 {
 private:
+    class Data
+    {
+    public:
+        int value, frequency;
+        void set(const int value, const int frequency)
+        {
+            this->value = value;
+            this->frequency = frequency;
+        }
+    };
     int capacity, minimumFrequency;
-    unordered_map<int, pair<int, int>> key2data; //{value, frequency}
+    unordered_map<int, Data> key2data;
     unordered_map<int, list<int>::iterator> key2position;
     unordered_map<int, list<int>> frequency2key;
     void increaseFrequency(const int key)
     {
-        frequency2key[key2data[key].second].erase(key2position[key]);
-        ++key2data[key].second;
-        frequency2key[key2data[key].second].emplace_front(key);
-        key2position[key] = frequency2key[key2data[key].second].begin();
-        if (frequency2key[minimumFrequency].empty())
-            minimumFrequency++;
+        frequency2key[key2data[key].frequency].erase(key2position[key]);
+        if (frequency2key[key2data[key].frequency].empty())
+        {
+            frequency2key.erase(key2data[key].frequency);
+            if (key2data[key].frequency == minimumFrequency)
+                ++minimumFrequency;
+        }
+        ++key2data[key].frequency;
+        frequency2key[key2data[key].frequency].emplace_front(key);
+        key2position[key] = frequency2key[key2data[key].frequency].begin();
     }
 
 public:
@@ -22,13 +36,13 @@ public:
         if (key2data.find(key) == key2data.end())
             return -1;
         increaseFrequency(key);
-        return key2data[key].first;
+        return key2data[key].value;
     }
     void put(int key, int value)
     {
         if (key2data.find(key) != key2data.end())
         {
-            key2data[key].first = value;
+            key2data[key].value = value;
             increaseFrequency(key);
             return;
         }
@@ -38,8 +52,10 @@ public:
             key2data.erase(removeKey);
             key2position.erase(removeKey);
             frequency2key[minimumFrequency].pop_back();
+            if (frequency2key[minimumFrequency].empty())
+                frequency2key.erase(minimumFrequency);
         }
-        key2data[key] = {value, 1};
+        key2data[key].set(value, 1);
         frequency2key[1].emplace_front(key);
         key2position[key] = frequency2key[1].begin();
         minimumFrequency = 1;
