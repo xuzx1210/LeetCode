@@ -1,27 +1,18 @@
 class Solution
 {
-public:
-    int findMinDepth(TreeNode *cur)
+private:
+    int dfs(TreeNode *node)
     {
-        if (cur->left)
-        {
-            if (cur->right)
-                return min(findMinDepth(cur->left), findMinDepth(cur->right)) + 1;
-            else
-                return findMinDepth(cur->left) + 1;
-        }
-        else
-        {
-            if (cur->right)
-                return findMinDepth(cur->right) + 1;
-            else
-                return 1;
-        }
+        if (!node)
+            return 10001;
+        if (!node->left && !node->right)
+            return 1;
+        return min(dfs(node->left), dfs(node->right)) + 1;
     }
+
+public:
     int minDepth(TreeNode *root)
     {
-        if (!root)
-            return 0;
-        return findMinDepth(root);
+        return root ? dfs(root) : 0;
     }
 };
