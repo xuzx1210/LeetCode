@@ -1,3 +1,4 @@
+// BFS
 class Solution
 {
 private:
@@ -50,6 +51,60 @@ public:
             if (node)
                 result.emplace_back(node->val);
         }
+        return result;
+    }
+};
+
+// DFS
+class Solution
+{
+private:
+    class NewTreeNode
+    {
+    public:
+        int val;
+        NewTreeNode *parent, *left, *right;
+        NewTreeNode(int v, NewTreeNode *p) : val(v), parent(p) {}
+    };
+    TreeNode *start;
+    NewTreeNode *newStart;
+    NewTreeNode *makeNewTree(NewTreeNode *parent, TreeNode *node)
+    {
+        if (!node)
+            return nullptr;
+        NewTreeNode *newNode = new NewTreeNode(node->val, parent);
+        newNode->left = makeNewTree(newNode, node->left);
+        newNode->right = makeNewTree(newNode, node->right);
+        if (start == node)
+            newStart = newNode;
+        return newNode;
+    }
+    vector<int> result;
+    void dfs(NewTreeNode *prev, NewTreeNode *curr, int k)
+    {
+        if (!curr)
+            return;
+        if (!k)
+        {
+            result.emplace_back(curr->val);
+            return;
+        }
+        --k;
+        if (prev != curr->left)
+            dfs(curr, curr->left, k);
+        if (prev != curr->right)
+            dfs(curr, curr->right, k);
+        if (prev != curr->parent)
+            dfs(curr, curr->parent, k);
+    }
+
+public:
+    vector<int> distanceK(TreeNode *root, TreeNode *target, int k)
+    {
+        start = target;
+        NewTreeNode *newRoot = makeNewTree(nullptr, root);
+        result.clear();
+        dfs(nullptr, newStart, k);
         return result;
     }
 };
