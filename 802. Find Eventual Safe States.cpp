@@ -9,7 +9,7 @@ private:
         visited[index] = true;
         bool result = true;
         for (const int next : graph[index])
-            result = result && dfs(next, graph);
+            result &= dfs(next, graph);
         return safe[index] = result;
     }
 
