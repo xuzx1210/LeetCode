@@ -1,23 +1,31 @@
 class Solution
 {
+private:
+    vector<bool> visited, path;
+    bool dfs(const int index, const vector<vector<int>> &graph)
+    {
+        if (visited[index])
+            return !path[index];
+        visited[index] = true;
+        path[index] = true;
+        for (const int prerequisite : graph[index])
+            if (!dfs(prerequisite, graph))
+                return false;
+        path[index] = false;
+        return true;
+    }
+
 public:
     bool canFinish(int numCourses, vector<vector<int>> &prerequisites)
     {
-        vector<vector<int>> block(numCourses, vector<int>({}));
-        vector<int> blocked(numCourses, 0);
-        for (auto prerequisite : prerequisites)
-        {
-            block[prerequisite[1]].push_back(prerequisite[0]);
-            ++blocked[prerequisite[0]];
-        }
-        vector<int> bfs({});
+        vector<vector<int>> graph(numCourses, vector<int>{});
+        for (const vector<int> &prerequisite : prerequisites)
+            graph[prerequisite[0]].emplace_back(prerequisite[1]);
+        visited.resize(numCourses, false);
+        path.resize(numCourses, false);
         for (int i = 0; i < numCourses; ++i)
-            if (!blocked[i])
-                bfs.push_back(i);
-        for (int i = 0; i < bfs.size(); ++i)
-            for (int next : block[bfs[i]])
-                if (!(--blocked[next]))
-                    bfs.push_back(next);
-        return bfs.size() == numCourses;
+            if (!dfs(i, graph))
+                return false;
+        return true;
     }
 };
