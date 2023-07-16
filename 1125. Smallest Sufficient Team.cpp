@@ -6,17 +6,16 @@ private:
     vector<vector<int>> dp;
     void dfs(const int index, const int skills)
     {
-        if (skills + 1 == (1 << skillCount) && team.size() < result.size())
-        {
+        if (result.size() <= team.size()) // worse than result
+            return;
+        if (skills + 1 == (1 << skillCount)) // save smallest team
             result = team;
+        if (index == peopleCount || dp[index][skills] <= team.size()) // out of range or worse than before
             return;
-        }
-        if (index == peopleCount || dp[index][skills] <= team.size())
-            return;
-        dp[index][skills] = team.size();
-        dfs(index + 1, skills);
+        dp[index][skills] = team.size(); // save smalleest team
+        dfs(index + 1, skills);          // no hire
         team.emplace_back(index);
-        dfs(index + 1, skills | peopleSkills[index]);
+        dfs(index + 1, skills | peopleSkills[index]); // hire
         team.pop_back();
     }
 
@@ -27,18 +26,14 @@ public:
         result.resize(peopleCount);
         iota(result.begin(), result.end(), 0);
         team.clear();
-        peopleSkills.clear();
-        dp.resize(peopleCount, vector<int>((1 << skillCount), peopleCount + 1));
+        peopleSkills.resize(peopleCount, 0);
+        dp.resize(peopleCount, vector<int>((1 << skillCount), peopleCount));
         unordered_map<string, int> skills{};
         for (int i = 0; i < skillCount; ++i)
             skills[req_skills[i]] = (1 << i);
-        for (const vector<string> &person : people)
-        {
-            int skillBitMask = 0;
-            for (const string &skill : person)
-                skillBitMask |= skills[skill];
-            peopleSkills.emplace_back(skillBitMask);
-        }
+        for (int i = 0; i < peopleCount; ++i)
+            for (const string &skill : people[i])
+                peopleSkills[i] |= skills[skill];
         dfs(0, 0);
         return result;
     }
