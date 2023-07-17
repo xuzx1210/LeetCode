@@ -1,37 +1,49 @@
 class Solution
 {
 private:
-    vector<int> makeNumber(ListNode *head)
+    int countSize(ListNode *head)
     {
-        vector<int> result{};
-        for (ListNode *cur = head; cur; cur = cur->next)
-            result.emplace_back(cur->val);
-        reverse(result.begin(), result.end());
-        return result;
+        int size = 0;
+        for (; head; head = head->next)
+            ++size;
+        return size;
     }
-    void fullAdder(int input, int &carry, vector<int> &sum)
-    { // input: digit1 + digit2
-        int tmp = input + carry;
-        carry = tmp >= 10;
-        sum.emplace_back(carry ? tmp - 10 : tmp);
+    ListNode *reverse(ListNode *head)
+    {
+        ListNode *prev = nullptr;
+        for (ListNode *curr = head; curr;)
+        {
+            ListNode *next = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = next;
+        }
+        return prev;
     }
 
 public:
     ListNode *addTwoNumbers(ListNode *l1, ListNode *l2)
     {
-        vector<int> number1(makeNumber(l1)), number2(makeNumber(l2)), sum{}; // reversed numbers
-        const size_t size1 = number1.size(), size2 = number2.size();
-        const size_t minSize = min(size1, size2), maxSize = max(size1, size2);
+        const int size1 = countSize(l1), size2 = countSize(l2);
+        ListNode *back1 = reverse(l1), *back2 = reverse(l2);
+        if (size1 < size2)
+            swap(back1, back2);
         int carry = 0;
-        for (size_t i = 0; i < minSize; ++i)
-            fullAdder(number1[i] + number2[i], carry, sum);
-        for (size_t i = minSize; i < maxSize; ++i)
-            fullAdder((size1 > size2 ? number1 : number2)[i], carry, sum);
+        ListNode *prev = nullptr;
+        for (ListNode *curr1 = back1, *curr2 = back2; curr1;)
+        {
+            int sum = curr1->val + carry;
+            if (curr2)
+                sum += curr2->val;
+            curr1->val = sum % 10;
+            carry = sum / 10;
+            prev = curr1;
+            curr1 = curr1->next;
+            if (curr2)
+                curr2 = curr2->next;
+        }
         if (carry)
-            sum.emplace_back(1);
-        ListNode *result = nullptr;
-        for (int &digit : sum) // create linked list from back
-            result = new ListNode(digit, result);
-        return result;
+            prev->next = new ListNode(1);
+        return reverse(back1);
     }
 };
