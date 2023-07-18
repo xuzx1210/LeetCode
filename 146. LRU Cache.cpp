@@ -2,32 +2,32 @@ class LRUCache
 {
 private:
     int capacity;
-    list<pair<int, int>> values;
-    unordered_map<int, list<pair<int, int>>::iterator> position;
+    list<pair<int, int>> cache;
+    vector<optional<list<pair<int, int>>::iterator>> position;
 
 public:
-    LRUCache(int capacity) : capacity(capacity), values{}, position{} {}
+    LRUCache(int capacity) : capacity(capacity), cache{}, position(10001, nullopt) {}
     int get(int key)
     {
-        if (position.find(key) == position.end())
+        if (!position[key])
             return -1;
-        values.splice(values.begin(), values, position[key]);
-        return position[key]->second;
+        cache.splice(cache.begin(), cache, position[key].value());
+        return cache.begin()->second;
     }
     void put(int key, int value)
     {
-        if (position.find(key) != position.end())
+        if (position[key])
         {
-            values.splice(values.begin(), values, position[key]);
-            position[key]->second = value;
+            cache.splice(cache.begin(), cache, position[key].value());
+            cache.begin()->second = value;
             return;
         }
-        if (values.size() == capacity)
+        if (cache.size() == capacity)
         {
-            position.erase(values.back().first);
-            values.pop_back();
+            position[cache.back().first] = nullopt;
+            cache.pop_back();
         }
-        values.emplace_front(key, value);
-        position[key] = values.begin();
+        cache.emplace_front(key, value);
+        position[key] = cache.begin();
     }
 };
