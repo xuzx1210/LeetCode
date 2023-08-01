@@ -1,28 +1,29 @@
 class Solution
 {
-public:
-    vector<int> numStack;
+private:
     vector<vector<int>> result;
-    int range;
-    void dfs(int index, int remain)
+    vector<int> combination;
+    int n;
+    void dfs(const int index, const int remain)
     {
         if (remain == 0)
         {
-            result.push_back(numStack);
+            result.emplace_back(combination);
             return;
         }
-        for (int i = index; i <= range - remain; ++i)
-        {
-            numStack.push_back(i + 1);
-            dfs(i + 1, remain - 1);
-            numStack.pop_back();
-        }
+        if (index + remain > n)
+            return;
+        combination.emplace_back(index + 1);
+        dfs(index + 1, remain - 1);
+        combination.pop_back();
+        dfs(index + 1, remain);
     }
+
+public:
     vector<vector<int>> combine(int n, int k)
     {
-        range = n;
-        numStack.clear();
         result.clear();
+        this->n = n;
         dfs(0, k);
         return result;
     }
