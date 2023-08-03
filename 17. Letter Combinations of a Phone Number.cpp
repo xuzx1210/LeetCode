@@ -1,38 +1,39 @@
 class Solution
 {
 private:
-    vector<string> result, phone;
-    string cur;
-    vector<size_t> digits;
-    size_t size;
-    void dfs(size_t index)
+    vector<string> result;
+    string combination;
+    vector<string> letters;
+    vector<int> number;
+    int size;
+    void recursive(const int index)
     {
         if (index == size)
         {
-            result.push_back(cur);
+            result.emplace_back(combination);
             return;
         }
-        for (char c : phone[digits[index]])
+        for (const char letter : letters[number[index]])
         {
-            cur.push_back(c);
-            dfs(index + 1);
-            cur.pop_back();
+            combination.push_back(letter);
+            recursive(index + 1);
+            combination.pop_back();
         }
     }
 
 public:
     vector<string> letterCombinations(string digits)
     {
-        size = digits.length();
+        if (digits.empty())
+            return {};
         result.clear();
-        if (!size)
-            return result;
-        this->digits.clear();
-        for (char c : digits)
-            this->digits.push_back(c - '2');
-        phone = {"abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
-        cur.clear();
-        dfs(0);
+        combination.clear();
+        number.clear();
+        for (const char digit : digits)
+            number.emplace_back(digit - '2');
+        size = number.size();
+        letters = {"abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+        recursive(0);
         return result;
     }
 };
