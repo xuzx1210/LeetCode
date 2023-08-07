@@ -3,18 +3,16 @@ class Solution
 public:
     bool searchMatrix(vector<vector<int>> &matrix, int target)
     {
-        int m = matrix.size(), n = matrix[0].size();
-        int left = 0, right = m * n;
-        while (left < right)
+        const int m = matrix.size(), n = matrix.front().size();
+        for (int left = 0, right = m * n; left < right;)
         {
-            int mid = (left + right) >> 1;
-            auto d = div(mid, n);
-            int row = d.quot, column = d.rem;
-            int num = matrix[row][column];
-            if (target > num)
-                left = mid + 1;
-            else if (target < num)
-                right = mid;
+            const int middle = (left + right) >> 1;
+            const div_t d = div(middle, n);
+            const int value = matrix[d.quot][d.rem];
+            if (value < target)
+                left = middle + 1;
+            else if (target < value)
+                right = middle;
             else
                 return true;
         }
