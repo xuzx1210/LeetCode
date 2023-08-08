@@ -3,39 +3,39 @@ class Solution
 public:
     int search(vector<int> &nums, int target)
     {
-        const int n = nums.size();
-        int left = 0, right = n;
+        const int size = nums.size();
+        int left = 0, right = size;
         while (left < right)
-        { // find k
+        {
             const int middle = (left + right) >> 1;
             if (nums[0] <= nums[middle])
                 left = middle + 1;
             else
                 right = middle;
         }
-        const int k = n - left;
+        const int k = size - left;
         left = 0;
-        right = n - k;
+        right = size - k;
         while (left < right)
-        { // find target in nums[0 : n - k]
+        {
             const int middle = (left + right) >> 1;
-            const int current = nums[middle];
-            if (target < current)
+            const int num = nums[middle];
+            if (target < num)
                 right = middle;
-            else if (current < target)
+            else if (num < target)
                 left = middle + 1;
             else
                 return middle;
         }
-        left = n - k;
-        right = n;
+        left = size - k;
+        right = size;
         while (left < right)
-        { // find target in nums[n - k : n]
+        {
             const int middle = (left + right) >> 1;
-            const int current = nums[middle];
-            if (target < current)
+            const int num = nums[middle];
+            if (target < num)
                 right = middle;
-            else if (current < target)
+            else if (num < target)
                 left = middle + 1;
             else
                 return middle;
