@@ -3,46 +3,44 @@ class Solution
 public:
     vector<string> fullJustify(vector<string> &words, int maxWidth)
     {
-        vector<string> result({});
-        while (words.size())
+        vector<string> result{};
+        const int size = words.size();
+        int beginIndex = 0, length = 0;
+        for (int index = 0; index < size; ++index)
         {
-            int charLength = 0;
-            vector<string> tmp({});
-            for (int i = 0; i < words.size(); ++i)
+            if (length + words[index].length() + index - beginIndex <= maxWidth)
             {
-                if (charLength + tmp.size() + words[i].length() > maxWidth)
-                    break;
-                tmp.push_back(words[i]);
-                charLength += words[i].length();
-            }
-            words.erase(words.begin(), words.begin() + tmp.size());
-            int spaceLength = maxWidth - charLength;
-            if (tmp.size() == 1)
-            {
-                result.push_back(tmp[0] + string(spaceLength, ' '));
+                length += words[index].length();
                 continue;
             }
-            if (!words.size())
+            string line{};
+            int backIndex = index - 1;
+            if (beginIndex != backIndex)
             {
-                string cur("");
-                for (int i = 0; i < tmp.size() - 1; ++i)
-                    cur += (tmp[i] + " ");
-                cur += tmp.back();
-                cur += string(maxWidth - cur.length(), ' ');
-                result.push_back(cur);
-                continue;
+                div_t d = div(maxWidth - length, backIndex - beginIndex);
+                for (int i = beginIndex; i < backIndex; ++i)
+                {
+                    line.append(words[i]);
+                    line.insert(line.end(), d.quot, ' ');
+                    if (i - beginIndex < d.rem)
+                        line.push_back(' ');
+                }
             }
-            int quotient = spaceLength / (tmp.size() - 1), remainder = spaceLength % (tmp.size() - 1);
-            string space(quotient, ' '), cur("");
-            for (int i = 0; i < tmp.size() - 1; ++i)
-            {
-                cur += (tmp[i] + space);
-                if (i < remainder)
-                    cur.push_back(' ');
-            }
-            cur += tmp.back();
-            result.push_back(cur);
+            line.append(words[backIndex]);
+            line.insert(line.end(), maxWidth - line.length(), ' ');
+            result.emplace_back(line);
+            beginIndex = index;
+            length = words[index].length();
         }
+        string lastLine{};
+        for (int index = beginIndex; index < size; ++index)
+        {
+            lastLine.append(words[index]);
+            lastLine.push_back(' ');
+        }
+        lastLine.pop_back();
+        lastLine.insert(lastLine.end(), maxWidth - lastLine.length(), ' ');
+        result.emplace_back(lastLine);
         return result;
     }
 };
