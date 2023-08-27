@@ -5,20 +5,26 @@ public:
     {
         if (stones[0] + 1 != stones[1])
             return false;
-        const size_t size = stones.size();
-        vector<set<int>> dp(size);
-        dp[1].emplace(1);
-        for (size_t i = 2; i < size; ++i)
-            for (size_t j = 1; j < i; ++j)
-            {
-                const int diff = stones[i] - stones[j];
-                for (int k : dp[j])
-                    if (k - 1 <= diff && diff <= k + 1)
-                    {
-                        dp[i].emplace(diff);
-                        break;
-                    }
-            }
-        return !dp.back().empty();
+        const int size = stones.size();
+        unordered_map<int, int> indices{};
+        for (int i = 2; i < size; ++i)
+            indices[stones[i]] = i;
+        vector<vector<bool>> dp(size, vector<bool>(size, false));
+        dp[1][1] = true;
+        for (int index = 1; index < size - 1; ++index)
+            for (int k = 1; k <= index + 1; ++k)
+                if (dp[index][k])
+                {
+                    if (indices[stones[index] + k - 1])
+                        dp[indices[stones[index] + k - 1]][k - 1] = true;
+                    if (indices[stones[index] + k])
+                        dp[indices[stones[index] + k]][k] = true;
+                    if (indices[stones[index] + k + 1])
+                        dp[indices[stones[index] + k + 1]][k + 1] = true;
+                }
+        for (int k = 1; k < size; ++k)
+            if (dp.back()[k])
+                return true;
+        return false;
     }
 };
