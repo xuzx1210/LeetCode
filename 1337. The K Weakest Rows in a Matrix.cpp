@@ -1,31 +1,38 @@
 class Solution
 {
-public:
-    static bool compare(pair<int, int> &a, pair<int, int> &b)
+private:
+    int binarySearch(vector<int> &row)
     {
-        return a.second < b.second || a.second == b.second && a.first < b.first;
+        int left = 0, right = row.size();
+        while (left < right)
+        {
+            const int middle = (left + right) >> 1;
+            if (row[middle])
+                left = middle + 1;
+            else
+                right = middle;
+        }
+        return left;
     }
+
+public:
     vector<int> kWeakestRows(vector<vector<int>> &mat, int k)
     {
-        int m = mat.size(), n = mat[0].size();
-        vector<pair<int, int>> table(m, {0, 0});
-        for (int i = 0; i < m; ++i)
-        {
-            bool found = false;
-            for (int j = 0; j < n; ++j)
-                if (mat[i][j] != 1)
-                {
-                    table[i] = {i, j};
-                    found = true;
-                    break;
-                }
-            if (!found)
-                table[i] = {i, n};
-        }
-        sort(table.begin(), table.end(), compare);
-        vector<int> result(k, 0);
+        vector<int> result(k);
+        const int m = mat.size(), n = mat.front().size();
+        priority_queue<pair<int, int>> pq{};
         for (int i = 0; i < k; ++i)
-            result[i] = table[i].first;
+            pq.emplace(binarySearch(mat[i]), i);
+        for (int i = k; i < m; ++i)
+        {
+            pq.emplace(binarySearch(mat[i]), i);
+            pq.pop();
+        }
+        for (int i = k - 1; i >= 0; --i)
+        {
+            result[i] = pq.top().second;
+            pq.pop();
+        }
         return result;
     }
 };
