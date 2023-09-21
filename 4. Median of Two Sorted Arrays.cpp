@@ -1,41 +1,35 @@
-class Solution {
-public:
-    double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
-        vector<int> nums;
-        nums.clear();
-        while (true)
+class Solution
+{
+private:
+    int m, n;
+    int findKth(const vector<int> &nums1, const int index1, const vector<int> &nums2, const int index2, const int k)
+    {
+        cout << index1 << " " << index2 << " " << k << endl;
+        if (m <= index1)
+            return nums2[index2 + k];
+        if (n <= index2)
+            return nums1[index1 + k];
+        if (k == 0)
+            return min(nums1[index1], nums2[index2]);
+        if (k == 1)
         {
-            if (nums1.empty())
-            {
-                if (nums2.empty())
-                    break;
-                nums.push_back(nums2[0]);
-                nums2.erase(nums2.begin());
-            }
-            else
-            {
-                if (nums2.empty())
-                {
-                    nums.push_back(nums1[0]);
-                    nums1.erase(nums1.begin());
-                }
-                else
-                {
-                    if (nums1[0] < nums2[0])
-                    {
-                        nums.push_back(nums1[0]);
-                        nums1.erase(nums1.begin());
-                    }
-                    else
-                    {
-                        nums.push_back(nums2[0]);
-                        nums2.erase(nums2.begin());
-                    }
-                }
-            }
+            if (index1 + 1 < m && nums1[index1 + 1] < nums2[index2])
+                return nums1[index1 + 1];
+            if (index2 + 1 < n && nums2[index2 + 1] < nums1[index1])
+                return nums2[index2 + 1];
+            return max(nums1[index1], nums2[index2]);
         }
-        if (nums.size() & 1)
-            return nums[nums.size() >> 1];
-        return (nums[nums.size() >> 1] + nums[(nums.size() >> 1) - 1]) / 2.0;
+        const int half = k >> 1;
+        const int middle1 = index1 + half < m ? nums1[index1 + half] : INT_MAX;
+        const int middle2 = index2 + half < n ? nums2[index2 + half] : INT_MAX;
+        return middle1 < middle2 ? findKth(nums1, index1 + half, nums2, index2, k - half) : findKth(nums1, index1, nums2, index2 + half, k - half);
+    }
+
+public:
+    double findMedianSortedArrays(vector<int> &nums1, vector<int> &nums2)
+    {
+        m = nums1.size();
+        n = nums2.size();
+        return (findKth(nums1, 0, nums2, 0, (m + n - 1) >> 1) + findKth(nums1, 0, nums2, 0, (m + n) >> 1)) / 2.0;
     }
 };
