@@ -3,10 +3,11 @@ class Solution
 public:
     bool isSubsequence(string s, string t)
     {
-        int i = 0, tLength = t.length();
-        for (int j = 0; j < tLength; ++j)
+        const int sLength = s.length(), tLength = t.length();
+        int i = 0;
+        for (int j = 0; i < sLength && j < tLength; ++j)
             if (s[i] == t[j])
                 ++i;
-        return i == s.length();
+        return i == sLength;
     }
 };
