@@ -3,21 +3,23 @@ class Solution
 public:
     int longestStrChain(vector<string> &words)
     {
-        vector<vector<pair<string, int>>> table(17, vector<pair<string, int>>({}));
-        for (string &word : words)
-            table[word.length()].push_back({word, 1});
         int result = 1;
-        for (int length = 16; length > 0; --length)
-            for (auto &cur : table[length])
+        vector<vector<pair<int, int>>> dp(17, vector<pair<int, int>>{});
+        for (int i = words.size() - 1; i >= 0; --i)
+            dp[words[i].length()].emplace_back(i, 1);
+        for (int length = 1; length <= 16; ++length)
+            for (auto &[curr, currLen] : dp[length])
             {
-                result = max(result, cur.second);
-                for (int i = 0; i < length; ++i)
+                for (auto &[prev, prevLen] : dp[length - 1])
                 {
-                    string substring = cur.first.substr(0, i) + cur.first.substr(i + 1, length - i - 1);
-                    for (auto &previous : table[length - 1])
-                        if (previous.first == substring)
-                            previous.second = max(previous.second, cur.second + 1);
+                    int i = 0;
+                    for (int j = 0; j < words[curr].length(); ++j)
+                        if (words[prev][i] == words[curr][j])
+                            ++i;
+                    if (i == words[prev].length())
+                        currLen = max(currLen, prevLen + 1);
                 }
+                result = max(result, currLen);
             }
         return result;
     }
