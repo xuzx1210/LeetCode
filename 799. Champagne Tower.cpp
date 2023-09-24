@@ -3,17 +3,17 @@ class Solution
 public:
     double champagneTower(int poured, int query_row, int query_glass)
     {
-        vector<vector<double>> glass(query_row + 2, vector<double>(query_row + 2, 0.0));
-        glass[0][0] = poured;
-        for (int i = 0; i <= query_row; ++i)
-            for (int j = 0; j <= i; ++j)
-                if (glass[i][j] > 1.0)
+        vector<vector<double>> volume(query_row + 2, vector<double>(query_row + 2, 0.0));
+        volume[0][0] = poured;
+        for (int row = 0; row <= query_row; ++row)
+            for (int glass = 0; glass <= row; ++glass)
+                if (1.0 < volume[row][glass])
                 {
-                    double flow = (glass[i][j] - 1.0) / 2.0;
-                    glass[i + 1][j] += flow;
-                    glass[i + 1][j + 1] += flow;
-                    glass[i][j] = 1.0;
+                    const double flow = (volume[row][glass] - 1.0) / 2;
+                    volume[row + 1][glass] += flow;
+                    volume[row + 1][glass + 1] += flow;
+                    volume[row][glass] = 1.0;
                 }
-        return min(1.0, glass[query_row][query_glass]);
+        return min(1.0, volume[query_row][query_glass]);
     }
 };
