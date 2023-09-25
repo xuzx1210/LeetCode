@@ -4,7 +4,6 @@ private:
     int m, n;
     int findKth(const vector<int> &nums1, const int index1, const vector<int> &nums2, const int index2, const int k)
     {
-        cout << index1 << " " << index2 << " " << k << endl;
         if (m <= index1)
             return nums2[index2 + k];
         if (n <= index2)
