@@ -3,30 +3,24 @@ class Solution
 public:
     string removeDuplicateLetters(string s)
     {
-        int length = s.length();
+        string result{};
+        const int length = s.length();
         vector<int> last(26, -1);
-        vector<bool> visited(26);
+        vector<bool> seen(26, false);
         for (int i = 0; i < length; ++i)
             last[s[i] - 'a'] = i;
-        string result = "";
         for (int i = 0; i < length; ++i)
         {
-            int cur = s[i] - 'a';
-            if (visited[cur])
+            const int index = s[i] - 'a';
+            if (seen[index])
                 continue;
-            while (!result.empty())
+            while (!result.empty() && s[i] < result.back() && i < last[result.back() - 'a'])
             {
-                int back = result.back() - 'a';
-                if (result.back() > s[i] && last[back] > i)
-                {
-                    visited[back] = false;
-                    result.pop_back();
-                }
-                else
-                    break;
+                seen[result.back() - 'a'] = false;
+                result.pop_back();
             }
+            seen[index] = true;
             result.push_back(s[i]);
-            visited[cur] = true;
         }
         return result;
     }
