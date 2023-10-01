@@ -3,14 +3,15 @@ class Solution
 public:
     string reverseWords(string s)
     {
-        int length = s.length(), start = 0;
-        for (int i = 1; i < length; ++i)
-            if (s[i] == ' ')
+        s.push_back(' ');
+        const int length = s.length();
+        for (int begin = 0, end = 0; end < length; ++end)
+            if (s[end] == ' ')
             {
-                reverse(s.begin() + start, s.begin() + i);
-                start = i + 1;
+                reverse(s.begin() + begin, s.begin() + end);
+                begin = end + 1;
             }
-        reverse(s.begin() + start, s.begin() + length);
+        s.pop_back();
         return s;
     }
 };
