@@ -1,24 +1,23 @@
 class Solution
 {
 private:
-    void process(string &s, vector<char> &v)
+    int typing(string &str)
     {
-        for (char c : s)
+        int result = 0;
+        for (char c : str)
             if (c == '#')
-            {
-                if (!v.empty())
-                    v.pop_back();
-            }
+                result = max(0, result - 1);
             else
-                v.push_back(c);
+                str[result++] = c;
+        return result;
     }
 
 public:
     bool backspaceCompare(string s, string t)
     {
-        vector<char> a({}), b({});
-        process(s, a);
-        process(t, b);
-        return a == b;
+        const int sLength = typing(s), tLength = typing(t);
+        if (sLength != tLength)
+            return false;
+        return equal(s.begin(), s.begin() + sLength, t.begin());
     }
 };
