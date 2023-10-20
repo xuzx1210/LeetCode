@@ -1,32 +1,63 @@
 class NestedIterator
 {
 private:
-    vector<int> list;
-    size_t index, size;
-    void flatten(NestedInteger &x)
+    int index;
+    vector<int> flattenedList;
+    void flatten(const vector<NestedInteger> &nestedList)
     {
-        if (x.isInteger())
-            list.push_back(x.getInteger());
-        else
-            for (auto y : x.getList())
-                flatten(y);
+        for (const NestedInteger &nestedInteger : nestedList)
+            if (nestedInteger.isInteger())
+                flattenedList.emplace_back(nestedInteger.getInteger());
+            else
+                flatten(nestedInteger.getList());
     }
 
 public:
     NestedIterator(vector<NestedInteger> &nestedList)
     {
-        list.clear();
         index = 0;
-        for (auto x : nestedList)
-            flatten(x);
-        size = list.size();
+        flatten(nestedList);
     }
     int next()
     {
-        return list[index++];
+        return flattenedList[index++];
     }
     bool hasNext()
     {
-        return index < size;
+        return index < flattenedList.size();
+    }
+};
+
+class NestedIterator
+{
+private:
+    stack<pair<vector<NestedInteger>::iterator, vector<NestedInteger>::iterator>> layers;
+
+public:
+    NestedIterator(vector<NestedInteger> &nestedList)
+    {
+        while (!layers.empty())
+            layers.pop();
+        layers.emplace(nestedList.begin(), nestedList.end());
+    }
+    int next()
+    {
+        hasNext();
+        return (layers.top().first++)->getInteger();
+    }
+    bool hasNext()
+    {
+        while (!layers.empty())
+            if (layers.top().first == layers.top().second)
+                layers.pop();
+            else
+            {
+                vector<NestedInteger>::iterator curr = layers.top().first;
+                if (curr->isInteger())
+                    return true;
+                ++layers.top().first;
+                layers.emplace(curr->getList().begin(), curr->getList().end());
+            }
+        return false;
     }
 };
