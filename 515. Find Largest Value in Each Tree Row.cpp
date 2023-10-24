@@ -1,3 +1,4 @@
+// BFS
 class Solution
 {
 public:
@@ -22,6 +23,34 @@ public:
             if (maxNode != nullptr)
                 result.emplace_back(maxNode->val);
         }
+        return result;
+    }
+};
+// DFS
+class Solution
+{
+private:
+    vector<int> result;
+    int findDepth(TreeNode *node)
+    {
+        return node == nullptr ? 0 : max(findDepth(node->left), findDepth(node->right)) + 1;
+    }
+    void dfs(TreeNode *node, int depth)
+    {
+        if (node == nullptr)
+            return;
+        result[depth] = max(result[depth], node->val);
+        ++depth;
+        dfs(node->left, depth);
+        dfs(node->right, depth);
+    }
+
+public:
+    vector<int> largestValues(TreeNode *root)
+    {
+        const int depth = findDepth(root);
+        result.resize(depth, INT_MIN);
+        dfs(root, 0);
         return result;
     }
 };
