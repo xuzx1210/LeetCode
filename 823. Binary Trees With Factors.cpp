@@ -3,28 +3,24 @@ class Solution
 public:
     int numFactoredBinaryTrees(vector<int> &arr)
     {
-        int mod = 1000000007;
+        int result = 0;
+        const int mod = 1000000007;
+        const int size = arr.size();
         sort(arr.begin(), arr.end());
-        int size = arr.size();
-        vector<long long> dp(size, 1);
-        int result = 1;
-        for (int i = 1; i < size; ++i)
+        vector<int> dp(size, 1);
+        for (int i = 0; i < size; ++i)
         {
-            int left = 0, right = i - 1;
-            while (left <= right)
+            for (int left = 0, right = i - 1; left <= right;)
             {
-                long long cur = (long long)arr[left] * (long long)arr[right];
-                if (cur < arr[i])
+                long product = (long)arr[left] * arr[right];
+                if (product < arr[i])
                     ++left;
-                else if (cur > arr[i])
+                else if (arr[i] < product)
                     --right;
                 else
                 {
-                    if (left == right)
-                        dp[i] += dp[left] * dp[right];
-                    else
-                        dp[i] += 2 * dp[left] * dp[right];
-                    dp[i] %= mod;
+                    long coefficient = left == right ? 1 : 2;
+                    dp[i] = (dp[i] + coefficient * dp[left] * dp[right]) % mod;
                     ++left;
                     --right;
                 }
