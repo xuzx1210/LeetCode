@@ -4,11 +4,8 @@ private:
     int rev(int x)
     {
         int result = 0;
-        while (x)
-        {
+        for (; x; x /= 10)
             result = result * 10 + x % 10;
-            x /= 10;
-        }
         return result;
     }
 
