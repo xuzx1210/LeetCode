@@ -1,20 +1,21 @@
 class Solution
 {
 private:
-    void dfs(TreeNode *cur, vector<int> &result)
+    vector<int> result;
+    void inorder(TreeNode *node)
     {
-        if (!cur)
+        if (!node)
             return;
-        dfs(cur->left, result);
-        result.emplace_back(cur->val);
-        dfs(cur->right, result);
+        inorder(node->left);
+        result.emplace_back(node->val);
+        inorder(node->right);
     }
 
 public:
     vector<int> inorderTraversal(TreeNode *root)
     {
-        vector<int> result = {};
-        dfs(root, result);
+        result = {};
+        inorder(root);
         return result;
     }
 };
