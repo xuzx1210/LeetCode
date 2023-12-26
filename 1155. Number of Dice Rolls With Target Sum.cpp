@@ -3,13 +3,16 @@ class Solution
 public:
     int numRollsToTarget(int n, int k, int target)
     {
-        int mod = 1000000007;
-        vector<vector<int>> dp(n + 1, vector<int>(target + 1));
-        dp[0][0] = 1;
-        for (int dice = 1; dice <= n; ++dice)
-            for (int sum = dice; sum <= target && sum <= dice * k; ++sum)
-                for (int face = 1; face <= k && face <= sum; ++face)
-                    dp[dice][sum] = (dp[dice][sum] + dp[dice - 1][sum - face]) % mod;
-        return dp[n][target];
+        const int mod = 1000000007;
+        vector<int> dp(target + 1, 0);
+        dp[0] = 1;
+        while (n--)
+            for (int i = target; i >= 0; --i)
+            {
+                dp[i] = 0;
+                for (int j = max(0, i - k); j < i; ++j)
+                    dp[i] = (dp[i] + dp[j]) % mod;
+            }
+        return dp[target];
     }
 };
