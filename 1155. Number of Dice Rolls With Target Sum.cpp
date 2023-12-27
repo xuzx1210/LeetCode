@@ -6,8 +6,8 @@ public:
         const int mod = 1000000007;
         vector<int> dp(target + 1, 0);
         dp[0] = 1;
-        while (n--)
-            for (int i = target; i >= 0; --i)
+        for (int roll = 0; roll < n; ++roll)
+            for (int i = min((roll + 1) * k, target); i >= roll; --i)
             {
                 dp[i] = 0;
                 for (int j = max(0, i - k); j < i; ++j)
