@@ -3,8 +3,8 @@ class Solution
 public:
     int minCost(string colors, vector<int> &neededTime)
     {
-        int result = 0, length = colors.length(), start = 0, maximum = 0;
-        for (int i = 0; i < length; result += neededTime[i++])
+        int result = accumulate(neededTime.begin(), neededTime.end(), 0), maximum = 0;
+        for (int i = colors.length() - 1, start = i; i >= 0; --i)
             if (colors[i] == colors[start])
                 maximum = max(maximum, neededTime[i]);
             else
