@@ -3,6 +3,8 @@ class Solution
 public:
     int numRollsToTarget(int n, int k, int target)
     {
+        if (n * k < target || target < n)
+            return 0;
         const int mod = 1000000007;
         vector<int> dp(target + 1, 0);
         dp[0] = 1;
