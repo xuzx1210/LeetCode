@@ -3,14 +3,12 @@ class Solution
 public:
     int lengthOfLIS(vector<int> &nums)
     {
-        vector<int> result = {};
-        for (int num : nums)
-            if (result.empty())
-                result.push_back(num);
-            else if (result.back() < num)
-                result.push_back(num);
+        int result = 0;
+        for (const int num : nums)
+            if (result == 0 || nums[result - 1] < num)
+                nums[result++] = num;
             else
-                *lower_bound(result.begin(), result.end(), num) = num;
-        return result.size();
+                *lower_bound(nums.begin(), nums.begin() + result, num) = num;
+        return result;
     }
 };
