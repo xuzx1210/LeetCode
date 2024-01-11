@@ -1,18 +1,23 @@
 class Solution
 {
 private:
-    int dfs(TreeNode *root, int minimum, int maximum)
+    int result;
+    void dfs(TreeNode *node, int minimum, int maximum)
     {
-        if (!root)
-            return 0;
-        minimum = min(minimum, root->val);
-        maximum = max(maximum, root->val);
-        return max(maximum - minimum, max(dfs(root->left, minimum, maximum), dfs(root->right, minimum, maximum)));
+        if (node == nullptr)
+            return;
+        minimum = min(minimum, node->val);
+        maximum = max(maximum, node->val);
+        result = max(result, maximum - minimum);
+        dfs(node->left, minimum, maximum);
+        dfs(node->right, minimum, maximum);
     }
 
 public:
     int maxAncestorDiff(TreeNode *root)
     {
-        return dfs(root, root->val, root->val);
+        result = 0;
+        dfs(root, INT_MAX, INT_MIN);
+        return result;
     }
 };
