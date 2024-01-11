@@ -6,7 +6,7 @@ private:
     {
         if (node == nullptr)
             return {false, 0};
-        pair<bool, int> left(dfs(node->left, start)), right(dfs(node->right, start));
+        const pair<bool, int> left(dfs(node->left, start)), right(dfs(node->right, start));
         if (node->val == start)
         {
             result = max({result, left.second, right.second});
