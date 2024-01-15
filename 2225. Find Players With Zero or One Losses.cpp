@@ -3,15 +3,17 @@ class Solution
 public:
     vector<vector<int>> findWinners(vector<vector<int>> &matches)
     {
-        map<int, int> loss;
-        for (vector<int> &match : matches)
-            loss[match[0]] = loss[match[1]] = 0;
-        for (vector<int> &match : matches)
-            ++loss[match[1]];
-        vector<vector<int>> result(2);
-        for (auto &[key, value] : loss)
-            if (value < 2)
-                result[value].emplace_back(key);
-        return result;
+        vector<vector<int>> answer(2, vector<int>{});
+        map<int, int> loses{};
+        for (const vector<int> &match : matches)
+        {
+            const int winner = match[0], loser = match[1];
+            loses[winner] = loses[winner];
+            ++loses[loser];
+        }
+        for (const auto &[player, lost] : loses)
+            if (lost < 2)
+                answer[lost].emplace_back(player);
+        return answer;
     }
 };
