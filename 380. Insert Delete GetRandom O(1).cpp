@@ -1,33 +1,36 @@
 class RandomizedSet
 {
 private:
-    unordered_map<int, int> index; // key: val, value: index of val in vals + 1(0 for not exist in vals)
-    vector<int> vals;
+    unordered_map<int, int> positions;
+    vector<int> randomizedSet;
 
 public:
     RandomizedSet()
     {
+        positions.clear();
+        randomizedSet.clear();
     }
     bool insert(int val)
     {
-        if (index[val])
+        if (positions.find(val) != positions.end())
             return false;
-        vals.emplace_back(val);
-        index[val] = vals.size();
+        positions[val] = randomizedSet.size();
+        randomizedSet.emplace_back(val);
         return true;
     }
     bool remove(int val)
     {
-        if (!index[val])
+        if (positions.find(val) == positions.end())
             return false;
-        vals[index[val] - 1] = vals.back();
-        index[vals.back()] = index[val];
-        index[val] = 0;
-        vals.pop_back();
+        const int position = positions[val], back = randomizedSet.back();
+        positions[back] = position;
+        positions.erase(val);
+        randomizedSet[position] = back;
+        randomizedSet.pop_back();
         return true;
     }
     int getRandom()
     {
-        return vals[rand() % vals.size()];
+        return randomizedSet[rand() % randomizedSet.size()];
     }
 };
