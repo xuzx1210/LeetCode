@@ -3,27 +3,18 @@ class Solution
 public:
     int sumSubarrayMins(vector<int> &arr)
     {
-        const size_t size = arr.size(), mod = 1000000007;
-        stack<size_t> monotonic; // index
-        vector<size_t> dp(size);
-        for (size_t i = 0; i < size; ++i)
+        int result = 0;
+        const int size = arr.size(), mod = 1000000007;
+        vector<int> dp(size);
+        stack<int> monotonic{};
+        for (int i = 0; i < size; ++i)
         {
-            while (!monotonic.empty())
-                if (arr[monotonic.top()] >= arr[i])
-                    monotonic.pop();
-                else
-                    break;
-            if (monotonic.empty())
-                dp[i] = (i + 1) * arr[i];
-            else
-            {
-                size_t prev = monotonic.top();
-                dp[i] = dp[prev] + (i - prev) * arr[i];
-            }
+            while (!monotonic.empty() && arr[monotonic.top()] >= arr[i])
+                monotonic.pop();
+            dp[i] = monotonic.empty() ? (i + 1) * arr[i] : (dp[monotonic.top()] + (i - monotonic.top()) * arr[i]) % mod;
             monotonic.emplace(i);
         }
-        size_t result = 0;
-        for (size_t &num : dp)
+        for (const int &num : dp)
             result = (result + num) % mod;
         return result;
     }
