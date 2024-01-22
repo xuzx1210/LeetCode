@@ -3,21 +3,12 @@ class Solution
 public:
     vector<int> findErrorNums(vector<int> &nums)
     {
-        int n = nums.size();
-        vector<bool> occur(n);
-        vector<int> result(2);
-        for (int &num : nums)
-        {
-            if (occur[num - 1])
-                result[0] = num;
-            occur[num - 1] = true;
-        }
-        for (int i = 0; i < n; ++i)
-            if (!occur[i])
-            {
-                result[1] = i + 1;
-                break;
-            }
-        return result;
+        const long n = nums.size();
+        long sum = accumulate(nums.begin(), nums.end(), 0), sum2 = 0;
+        for (const int num : nums)
+            sum2 += num * num;
+        int diff = n * (n + 1) / 2 - sum, diff2 = n * (n + 1) * (2 * n + 1) / 6 - sum2;
+        int missing = (diff2 / diff + diff) >> 1;
+        return {missing - diff, missing};
     }
 };
