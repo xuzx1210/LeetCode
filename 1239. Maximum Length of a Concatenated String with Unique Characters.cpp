@@ -3,20 +3,28 @@ class Solution
 public:
     int maxLength(vector<string> &arr)
     {
-        vector<bitset<26>> possible{bitset<26>()};
         int result = 0;
-        for (string &s : arr)
+        const int size = arr.size();
+        vector<int> dp{0};
+        for (const string &word : arr)
         {
-            bitset<26> cur;
-            for (char c : s)
-                cur.set(c - 'a');
-            if (cur.count() == s.length())
-                for (int i = possible.size() - 1; i >= 0; --i)
-                    if ((cur & possible[i]).none())
-                    {
-                        possible.emplace_back(cur | possible[i]);
-                        result = max(result, (int)(cur.count() + possible[i].count()));
-                    }
+            int alphabet = 0, duplicate = 0;
+            for (const char c : word)
+            {
+                const int mask = 1 << (c - 'a');
+                duplicate |= alphabet & mask;
+                alphabet |= mask;
+            }
+            if (duplicate)
+                continue;
+            for (int i = dp.size() - 1; i >= 0; --i)
+            {
+                if (dp[i] & alphabet)
+                    continue;
+                const int s = dp[i] | alphabet;
+                dp.emplace_back(s);
+                result = max(result, __popcount(s));
+            }
         }
         return result;
     }
