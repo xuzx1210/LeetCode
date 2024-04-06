@@ -1,32 +1,30 @@
 class Solution
 {
+private:
+    void parenthesesCheck(string &s, const char left, const char right)
+    {
+        string result{};
+        int parentheses = 0;
+        for (const char c : s)
+        {
+            if (c == right && parentheses == 0)
+                continue;
+            if (c == left)
+                ++parentheses;
+            if (c == right)
+                --parentheses;
+            result.push_back(c);
+        }
+        s = result;
+    }
+
 public:
     string minRemoveToMakeValid(string s)
     {
-        stack<int> parentheses;
-        while (!parentheses.empty())
-            parentheses.pop();
-        for (int i = 0; i < s.length(); ++i)
-        {
-            if (s[i] == '(')
-                parentheses.push(i);
-            else if (s[i] == ')')
-            {
-                if (parentheses.empty())
-                    s[i] = '?';
-                else
-                    parentheses.pop();
-            }
-        }
-        while (!parentheses.empty())
-        {
-            s[parentheses.top()] = '?';
-            parentheses.pop();
-        }
-        string result("");
-        for (char c : s)
-            if (c != '?')
-                result.push_back(c);
-        return result;
+        parenthesesCheck(s, '(', ')');
+        reverse(s.begin(), s.end());
+        parenthesesCheck(s, ')', '(');
+        reverse(s.begin(), s.end());
+        return s;
     }
 };
