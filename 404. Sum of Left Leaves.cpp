@@ -1,12 +1,12 @@
 class Solution
 {
 private:
-    int dfs(TreeNode *node, bool isLeft)
+    int dfs(TreeNode *node, const bool left)
     {
         if (!node)
             return 0;
-        if (!node->left && !node->right)
-            return isLeft ? node->val : 0;
+        if (!node->left && !node->right && left)
+            return node->val;
         return dfs(node->left, true) + dfs(node->right, false);
     }
 
