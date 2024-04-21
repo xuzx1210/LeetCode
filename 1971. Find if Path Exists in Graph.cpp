@@ -1,30 +1,47 @@
 class Solution
 {
+private:
+    class DSU
+    {
+    private:
+        vector<int> parent, rank;
+
+    public:
+        DSU(const int n)
+        {
+            parent.resize(n);
+            iota(parent.begin(), parent.end(), 0);
+            rank.resize(n, 0);
+        }
+        int Find(const int n)
+        {
+            if (parent[n] == n)
+                return n;
+            return parent[n] = Find(parent[n]);
+        }
+        void Union(const int a, const int b)
+        {
+            const int aRoot = Find(a), bRoot = Find(b);
+            if (aRoot == bRoot)
+                return;
+            if (rank[aRoot] > rank[bRoot])
+                parent[bRoot] = aRoot;
+            else if (rank[aRoot] < rank[bRoot])
+                parent[aRoot] = bRoot;
+            else
+            {
+                parent[aRoot] = bRoot;
+                ++rank[bRoot];
+            }
+        }
+    };
+
 public:
     bool validPath(int n, vector<vector<int>> &edges, int source, int destination)
     {
-        vector<vector<int>> graph(n, vector<int>{});
-        for (vector<int> &edge : edges)
-        {
-            graph[edge[0]].emplace_back(edge[1]);
-            graph[edge[1]].emplace_back(edge[0]);
-        }
-        vector<bool> visited(n, false);
-        visited[source] = true;
-        queue<int> bfs({source});
-        while (!bfs.empty())
-        {
-            int cur = bfs.front();
-            if (cur == destination)
-                return true;
-            bfs.pop();
-            for (int &next : graph[cur])
-                if (!visited[next])
-                {
-                    visited[next] = true;
-                    bfs.emplace(next);
-                }
-        }
-        return false;
+        DSU dsu(n);
+        for (const vector<int> &edge : edges)
+            dsu.Union(edge[0], edge[1]);
+        return dsu.Find(source) == dsu.Find(destination);
     }
 };
