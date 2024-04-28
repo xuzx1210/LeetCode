@@ -4,25 +4,25 @@ private:
     int n;
     vector<vector<int>> tree;
     vector<int> nodes, result;
-    void countNodes(int cur, int pre)
+    void countNodes(const int curr, const int prev)
     {
-        for (const int &next : tree[cur])
+        for (const int next : tree[curr])
         {
-            if (next == pre)
+            if (next == prev)
                 continue;
-            countNodes(next, cur);
-            nodes[cur] += nodes[next];
-            result[cur] += result[next] + nodes[next];
+            countNodes(next, curr);
+            nodes[curr] += nodes[next];
+            result[curr] += result[next] + nodes[next];
         }
     }
-    void findResult(int cur, int pre)
+    void findResult(const int curr, const int prev)
     {
-        for (const int &next : tree[cur])
+        for (const int next : tree[curr])
         {
-            if (next == pre)
+            if (next == prev)
                 continue;
-            result[next] = result[cur] - nodes[next] + (n - nodes[next]);
-            findResult(next, cur);
+            result[next] = result[curr] - nodes[next] + (n - nodes[next]);
+            findResult(next, curr);
         }
     }
 
@@ -30,10 +30,10 @@ public:
     vector<int> sumOfDistancesInTree(int n, vector<vector<int>> &edges)
     {
         this->n = n;
-        tree.assign(n, {});
-        nodes.assign(n, 1);
-        result.assign(n, 0);
-        for (vector<int> &edge : edges)
+        tree.resize(n, vector<int>{});
+        nodes.resize(n, 1);
+        result.resize(n, 0);
+        for (const vector<int> &edge : edges)
         {
             tree[edge[0]].emplace_back(edge[1]);
             tree[edge[1]].emplace_back(edge[0]);
