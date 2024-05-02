@@ -3,12 +3,14 @@ class Solution
 public:
     int findMaxK(vector<int> &nums)
     {
-        map<int, bool> exist;
-        for (int &num : nums)
-            exist[num] = true;
-        for (auto it = exist.rbegin(); it != exist.rend(); ++it)
-            if (it->second && exist[-it->first])
-                return it->first;
+        sort(nums.begin(), nums.end());
+        for (int left = 0, right = nums.size() - 1; left < right;)
+            if (nums[left] + nums[right] < 0)
+                ++left;
+            else if (0 < nums[left] + nums[right])
+                --right;
+            else
+                return nums[right];
         return -1;
     }
 };
