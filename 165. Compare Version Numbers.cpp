@@ -1,40 +1,28 @@
 class Solution
 {
-public:
-    vector<int> split(string version)
+private:
+    int getRevision(int &position, const string &version)
     {
-        vector<int> result({});
-        for (int i = 0; i < version.length(); ++i)
-            if (version[i] == '.')
-            {
-                result.push_back(stoi(string(version, 0, i)));
-                version.erase(0, i + 1);
-                i = -1;
-            }
-        result.push_back(stoi(version));
-        return result;
+        int revision = 0;
+        while (position < version.length() && version[position] != '.')
+            revision = revision * 10 + (version[position++] - '0');
+        ++position;
+        return revision;
     }
+
+public:
     int compareVersion(string version1, string version2)
     {
-        vector<int> v1(split(version1)), v2(split(version2));
-        int minSize = min(v1.size(), v2.size());
-        for (int i = 0; i < minSize; ++i)
+        const int length1 = version1.length(), length2 = version2.length();
+        int position1 = 0, position2 = 0;
+        while (position1 < length1 || position2 < length2)
         {
-            if (v1[i] < v2[i])
+            const int revision1 = getRevision(position1, version1), revision2 = getRevision(position2, version2);
+            if (revision1 < revision2)
                 return -1;
-            if (v1[i] > v2[i])
+            if (revision1 > revision2)
                 return 1;
         }
-        if (v1.size() < v2.size())
-        {
-            for (int i = minSize; i < v2.size(); ++i)
-                if (v2[i])
-                    return -1;
-        }
-        else
-            for (int i = minSize; i < v1.size(); ++i)
-                if (v1[i])
-                    return 1;
         return 0;
     }
 };
