@@ -5,10 +5,11 @@ public:
     {
         if (!head)
             return nullptr;
-        ListNode *next = removeNodes(head->next);
-        if (next && head->val < next->val)
-            return next;
-        head->next = next;
+        head->next = removeNodes(head->next);
+        if (!head->next)
+            return head;
+        if (head->val < head->next->val)
+            return head->next;
         return head;
     }
 };
