@@ -30,11 +30,11 @@ public:
     long long maximumValueSum(vector<int> &nums, int k, vector<vector<int>> &edges)
     {
         long long result = accumulate(nums.begin(), nums.end(), 0LL);
-        long long minAbsDiff = numeric_limits<long long>::max();
+        int minAbsDiff = numeric_limits<int>::max();
         bool odd = false;
         for (const int num : nums)
         {
-            long long diff = (num ^ k) - num;
+            int diff = (num ^ k) - num;
             const bool positive = (0 < diff);
             result += positive * diff;
             odd = odd != positive;
