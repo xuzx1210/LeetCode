@@ -1,30 +1,28 @@
 class Solution
 {
-public:
-    vector<int> numStack;
+private:
     vector<vector<int>> result;
-    void dfs(int index, int remain, vector<int> &nums)
+    vector<int> subset;
+    void dfs(int index, vector<int> &nums)
     {
-        if (remain == 0)
+        if (index == 0)
         {
-            result.push_back(numStack);
+            result.emplace_back(subset);
             return;
         }
-        for (int i = index; i <= nums.size() - remain; ++i)
-        {
-            numStack.push_back(nums[i]);
-            dfs(i + 1, remain - 1, nums);
-            numStack.pop_back();
-        }
+        --index;
+        dfs(index, nums);
+        subset.emplace_back(nums[index]);
+        dfs(index, nums);
+        subset.pop_back();
     }
+
+public:
     vector<vector<int>> subsets(vector<int> &nums)
     {
-        numStack.clear();
         result.clear();
-        for (int length = 0; length <= nums.size(); ++length)
-        {
-            dfs(0, length, nums);
-        }
+        subset.clear();
+        dfs(nums.size(), nums);
         return result;
     }
 };
