@@ -1,46 +1,36 @@
 class Solution
 {
 private:
-    string s;
-    size_t length;
-    vector<vector<size_t>> palindrome;
-    vector<string> path;
     vector<vector<string>> result;
-    bool isPalindrome(size_t start, size_t end)
+    int length;
+    vector<vector<bool>> isPalindrome;
+    vector<string> substrings;
+    void dfs(const int begin, const int end, const string &s)
     {
-        for (; start < end; ++start, --end)
-            if (s[start] != s[end])
-                return false;
-        return true;
-    }
-    void dfs(const size_t index)
-    {
-        if (index == length)
-        {
-            result.emplace_back(path);
+        if (begin == length)
+            result.emplace_back(substrings);
+        if (length < end)
             return;
-        }
-        for (const size_t next : palindrome[index])
+        if (isPalindrome[begin][end])
         {
-            path.emplace_back(s, index, next - index);
-            dfs(next);
-            path.pop_back();
+            substrings.emplace_back(s, begin, end - begin);
+            dfs(end, end + 1, s);
+            substrings.pop_back();
         }
+        dfs(begin, end + 1, s);
     }
 
 public:
     vector<vector<string>> partition(string s)
     {
-        this->s = s;
-        length = s.length();
-        palindrome.resize(length, vector<size_t>{});
-        for (size_t start = 0; start < length; ++start)
-            for (size_t end = start; end < length; ++end)
-                if (isPalindrome(start, end))
-                    palindrome[start].emplace_back(end + 1);
-        path.clear();
         result.clear();
-        dfs(0);
+        substrings.clear();
+        length = s.length();
+        isPalindrome.resize(length, vector<bool>(length + 1, true));
+        for (int len = 2; len <= length; ++len)
+            for (int begin = 0, end = begin + len; end <= length; ++begin, ++end)
+                isPalindrome[begin][end] = isPalindrome[begin + 1][end - 1] && s[begin] == s[end - 1];
+        dfs(0, 1, s);
         return result;
     }
 };
