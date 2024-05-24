@@ -3,9 +3,6 @@ class Solution
 public:
     int subsetXORSum(vector<int> &nums)
     {
-        int result = 0;
-        for (const int num : nums)
-            result |= num;
-        return result << (nums.size() - 1);
+        return accumulate(nums.begin(), nums.end(), 0, bit_or<int>()) << (nums.size() - 1);
     }
 };
